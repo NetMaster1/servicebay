@@ -22,5 +22,5 @@ def login(request):
 
 def logout(request):
         auth.logout(request)
-        messages.success(request, 'You are now logged out')
+        # messages.success(request, 'Вы вышли из системы')
         return redirect('index')

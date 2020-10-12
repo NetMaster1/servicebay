@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Registry, RegistryLine
+from .models import Item, Registry, RegistryLine, RegistryPending, RegistryLinePending
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages, auth
@@ -8,13 +8,19 @@ from .utils import render_to_pdf
 from io import BytesIO
 from django.http import HttpResponse
 import datetime
+from datetime import date
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'index.html')
+    queryset_list = Item.objects.all()
+    context = {
+        'queryset_list': queryset_list,
+    }
+           
+    return render(request, 'index.html', context)
 
 
 def choice(request):
@@ -26,6 +32,8 @@ def choice(request):
                 return redirect('item')
             elif option == 'log':
                 return redirect('log')
+            elif option == 'pending':
+                return redirect ('pending')
             else:
                 return redirect('presale')
         else:
@@ -49,17 +57,28 @@ def item(request):
             phone = request.POST['phone']
             defect = request.POST['defect']
             date_of_purchase = request.POST['date_of_purchase']
-            try:
-                if request.POST['warranty']:
-                    # if 'customer_type' in request.GET:
-                    warranty = True
-            except KeyError:
-                warranty = False
-            item = Item.objects.create(
-                shop=shop, user=user, brand=brand, model=model, imei=imei, comment=comment, full_set=full_set, client=client, status=status, phone=phone, defect=defect, date_of_purchase=date_of_purchase, warranty=warranty
-            )
-            item.save()
-            return render(request, 'order_used.html')
+            warranty = request.POST.get('warranty', False)
+            if warranty:
+                cheque = request.POST.get('cheque', False)
+                if cheque:
+                    item = Item.objects.create(
+                         shop=shop, user=user, brand=brand, model=model, imei=imei, comment=comment, full_set=full_set, client=client, status=status, phone=phone, defect=defect, date_of_purchase=date_of_purchase, warranty=True, cheque=True
+                    )
+                    item.save()
+                    return render(request, 'order_used.html')
+                else:
+                    messages.error(request, ('Убедитесь в наличии чека'))
+                    # return redirect('item')
+                    return render (request, 'form.html')
+           
+            else:
+                messages.error(request, ('Убедитесь в наличии гарантийного талона или узнайте в офисе об электронной гарантии'))
+                return redirect('item')
+            # try:
+            #     if request.POST['warranty']:
+            #         warranty = True
+            # except KeyError:
+            #     warranty = False      
         else:
             return render(request, 'form.html')
     else:
@@ -184,6 +203,44 @@ def search(request):
             return render(request, 'search.html', context)
     else:
         return render(request, 'login.html')
+
+def pending(request):
+    queryset = Item.objects.all()
+    # date = datetime.datetime.now().date
+    # date = datetime.datetime.now().year
+    date = datetime.date.today()
+    registry_pending = RegistryPending.objects.create()
+    registry_pending.save()
+
+    for item in queryset:
+        timedelta = date - item.created
+        td = timedelta.total_seconds()
+        if td>1209600:
+            RegistryLinePending.objects.create(
+                 registry_pending=registry_pending,
+                 user=item.user,
+                 shop=item.shop,
+                 brand=item.brand,
+                 model=item.model,
+                 imei=item.imei,
+                 date_of_purchase=item.date_of_purchase,
+                 phone=item.phone,
+                 defect=item.defect,
+                 comment=item.comment,
+                 status=item.status,
+                 client=item.client
+             )       
+    queryset = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
+
+    paginator = Paginator(queryset, 15)
+    page_number = request.GET.get('page')
+    queryset_list = paginator.get_page(page_number)
+
+    context = {
+        'queryset_list': queryset_list,
+        'date': date,
+    }
+    return render(request, 'pending.html', context)
 
 
 class DownloadPDF(View):

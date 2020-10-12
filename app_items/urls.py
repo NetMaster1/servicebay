@@ -9,6 +9,8 @@ urlpatterns = [
     path('search', views.search, name='search'),
     path('card/<int:item_id>', views.card, name='card'),
     path('update/<int:item_id>', views.update, name='update'),
+    path('pending', views.pending, name='pending'),
+    
 
     # path('GeneratePDF/<pk>', views.GeneratePDF.as_view(), name="GeneratePDF"),
     path('DownloadPDF', views.DownloadPDF.as_view(), name="DownloadPDF"),

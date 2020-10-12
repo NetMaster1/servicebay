@@ -17,6 +17,8 @@ class Item(models.Model):
     comment = models.TextField(default='used')
     full_set = models.TextField(default='full seet')
     warranty = models.BooleanField(default=False)
+    cheque = models.BooleanField(default=False)
+    pending = models.BooleanField(default=False)
     status = models.CharField(max_length=250)
     status_updated = models.DateField(auto_now=True)
 
@@ -49,7 +51,33 @@ class RegistryLine(models.Model):
     defect = models.TextField()
     comment = models.TextField(default='used')
     full_set = models.TextField(max_length=250, blank=True)
-    warranty = models.BooleanField(default=False)
+    status = models.CharField(max_length=250, blank=True)
+
+    def __int__(self):
+        return self.id
+
+class RegistryPending(models.Model):
+    created = models.DateField(auto_now_add=True)
+
+    def __int__(self):
+        return self.id
+
+class RegistryLinePending(models.Model):
+    registry_pending = models.ForeignKey(RegistryPending, on_delete=models.CASCADE)
+    shop = models.CharField(max_length=250, blank=True)
+    user = models.CharField(max_length=250, blank=True)
+    brand = models.CharField(max_length=250, blank=True)
+    model = models.CharField(max_length=250, blank=True)
+    imei = models.CharField(max_length=250, blank=True)
+    date_of_delivery = models.CharField(max_length=250, blank=True)
+    created = models.DateField(auto_now_add=True)
+    date_of_purchase = models.DateField(null=True)
+    # date_of_repair = models.DateTimeField(blank=True)
+    client = models.CharField(max_length=250, blank=True)
+    phone = models.CharField(max_length=250, blank=True)
+    defect = models.TextField()
+    comment = models.TextField(default='used')
+    full_set = models.TextField(max_length=250, blank=True)
     status = models.CharField(max_length=250, blank=True)
 
     def __int__(self):

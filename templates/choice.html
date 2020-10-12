@@ -8,11 +8,15 @@
             <form action="{% url 'choice' %}">
                 {% csrf_token %}
                 <div>
-                    <label for="choice">Выберите действие</label>
+                    <label for="choice"><h5>Выберите действие</h5></label>
                 </div>
                 <div>
                     <input type="radio" name="choice" value="log" id="choice">
                     <span class="text-black">Просмотреть журнал</span>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="pending" id="choice">
+                    <span class="text-black">Просроченные заявки</span>
                 </div>
                 <div>
                     <input type="radio" name="choice" value="form" id="choice">

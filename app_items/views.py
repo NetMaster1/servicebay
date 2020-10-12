@@ -90,25 +90,31 @@ def presale(request):
 
 
 def log(request):
-    queryset = Item.objects.order_by('created')
+    if request.user.is_authenticated:
+        queryset = Item.objects.order_by('created')
 
-    paginator = Paginator(queryset, 17)
-    page_number = request.GET.get('page')
-    queryset_list = paginator.get_page(page_number)
+        paginator = Paginator(queryset, 17)
+        page_number = request.GET.get('page')
+        queryset_list = paginator.get_page(page_number)
 
 
-    context = {
-        'queryset_list': queryset_list,
-    }
-    return render(request, 'log.html', context)
+        context = {
+            'queryset_list': queryset_list,
+        }
+        return render(request, 'log.html', context)
+    else:
+        return render(request, 'login.html')
 
 def card(request, item_id):
-    item = Item.objects.get(id=item_id)
-    context = {
-        'item': item,
-    }
-    return render(request, 'card.html', context)
-
+    if request.user.is_authenticated:
+        item = Item.objects.get(id=item_id)
+        context = {
+            'item': item,
+        }
+        return render(request, 'card.html', context)
+    else:
+        return render(request, 'login.html')
+        
 def update(request, item_id):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -118,61 +124,67 @@ def update(request, item_id):
             context = {
                 'item': item,
             }
-    return render(request, 'card.html', context)
+            return render(request, 'card.html', context)
+    else:
+        return render(request, 'login.html')
 
     
 def search(request):
-    if request.method == "POST":
-        queryset_list = Item.objects.all()
-        imei = request.POST['imei']
-        shop = request.POST['shop']
-        brand = request.POST['brand']
-        user = request.POST['user']
-        start_date = request.POST['start_date']
-        end_date = request.POST['end_date']
-        status_update_date = request.POST['status_update_date']
-        status = request.POST['status']
-        if imei:
-            queryset_list = queryset_list.filter(imei__icontains=imei)
-        if shop:
-            queryset_list = queryset_list.filter(shop__icontains=shop)
-        if brand:
-            queryset_list = queryset_list.filter(brand__icontains=brand)
-        if user:
-            queryset_list = queryset_list.filter(user__icontains=user)
-        if start_date:
-            queryset_list = queryset_list.filter(created__gte=start_date)
-        if end_date:
-            queryset_list = queryset_list.filter(created__lte=end_date)
-        if status:
-            queryset_list = queryset_list.filter(status__icontains=status)
-        if status_update_date:
-            queryset_list = queryset_list.filter(status_updated=status_update_date)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            queryset_list = Item.objects.all()
+            imei = request.POST['imei']
+            shop = request.POST['shop']
+            brand = request.POST['brand']
+            user = request.POST['user']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            status_update_date = request.POST['status_update_date']
+            status = request.POST['status']
+            if imei:
+                queryset_list = queryset_list.filter(imei__icontains=imei)
+            if shop:
+                queryset_list = queryset_list.filter(shop__icontains=shop)
+            if brand:
+                queryset_list = queryset_list.filter(brand__icontains=brand)
+            if user:
+                queryset_list = queryset_list.filter(user__icontains=user)
+            if start_date:
+                queryset_list = queryset_list.filter(created__gte=start_date)
+            if end_date:
+                queryset_list = queryset_list.filter(created__lte=end_date)
+            if status:
+                queryset_list = queryset_list.filter(status__icontains=status)
+            if status_update_date:
+                queryset_list = queryset_list.filter(status_updated=status_update_date)
 
-        registry = Registry.objects.create()
-        registry.save()
+            registry = Registry.objects.create()
+            registry.save()
 
-        for item in queryset_list:
-            RegistryLine.objects.create(
-                registry=registry,
-                user=item.user,
-                shop=item.shop,
-                brand=item.brand,
-                model=item.model,
-                imei=item.imei,
-                date_of_purchase=item.date_of_purchase,
-                phone=item.phone,
-                defect=item.defect,
-                comment=item.comment,
-                status=item.status,
-                client=item.client
-            )
-        registry_items = RegistryLine.objects.filter(registry=registry)
+            for item in queryset_list:
+                RegistryLine.objects.create(
+                    registry=registry,
+                    user=item.user,
+                    shop=item.shop,
+                    brand=item.brand,
+                    model=item.model,
+                    imei=item.imei,
+                    date_of_purchase=item.date_of_purchase,
+                    phone=item.phone,
+                    defect=item.defect,
+                    comment=item.comment,
+                    status=item.status,
+                    client=item.client
+                )
+            registry_items = RegistryLine.objects.filter(registry=registry)
 
-        context = {
-                'queryset_list': queryset_list,
-            }
-        return render(request, 'search.html', context)
+            context = {
+                    'queryset_list': queryset_list,
+                }
+            return render(request, 'search.html', context)
+    else:
+        return render(request, 'login.html')
+
 
 class DownloadPDF(View):
     # def get(self, request, *args, **kwargs):

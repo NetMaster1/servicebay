@@ -1,0 +1,152 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="container">
+<div class="row mt-5 pt-5">
+    <form action="{% url 'item' %}" method='POST'>
+        {% csrf_token %}
+    <!-- ========================== -->
+
+    <div class="row">
+    <div class="col-md-8">
+    <label for="shop">Выберите магазин: </label>
+    </div>
+    <div class="col-md-4">
+    <!-- <select id="shop" name="shop" size='10' autofocus> -->
+    <input list='shops' name='shop' required>
+    <datalist id='shops'>
+        <option value="Дзержинск">Дзержинск</option>
+        <option value="Городец МБ">Городец МБ</option>
+        <option value="Городец LS">Городец LS</option>
+        <option value="Правдинск">Правдинск</option>
+        <option value="Семенов МБ">Семенов МБ</option>
+        <option value="Семенов LS">Семенов LS</option>
+        <option value="Сормово">Сормово</option>
+        <option value="Карусель">Карусель</option>
+        <option value="Мончага">Мончага</option>
+        <option value="Омега">Омега</option>
+        <option value="Плаза">Плаза</option>
+        <option value="Манго">Манго</option>
+        <option value="Заволжье">Заволжье</option>
+        <option value="Балахна">Балахна</option>
+        <option value="Чкаловск">Чкаловск</option>
+    </datalist>
+    </div>
+    </div>
+    <br>
+   
+    <!-- ========================= -->
+    <div class="row">
+    <div class="col-md-8">
+    <label for="brand">Выберите производителя: </label>
+    </div>
+    <div class="col-md-4">
+    <!-- <select id="brand" name="brand"> -->
+    <input list='brands' name='brand' required>
+    <datalist id='brands'>
+        <option value="Samsung">Samsung</option>
+        <option value="Honor">Honor</option>
+        <option value="Huawei">Huawei</option>
+        <option value="Maxvi">Maxvi</option>
+        <option value="Inoi">Inoi</option>
+        <option value="Nokia">Nokia</option>
+        <option value="Prestigio">Presigio</option>
+        <option value="Sony">Sony</option>
+        <option value="Xiaomi">Xiaomi</option>
+        <option value="ZTE">ZTE</option>
+        <option value="Oppo">Oppo</option>
+        <option value="BQ">BQ</option>
+        <option value="Vertex">Vertex</option>
+        <option value="Alcatel">Alcatel</option>
+        <option value="others">Другой</option>
+    </datalist>
+    </div>
+    </div>
+    <br>
+    <!-- ========================================== -->
+    <div class="row">
+        <div class="col-md-8">
+            <label for="model">Укажите название модели</label>
+        </div>
+        <div class="col-md-4">
+    <input type="text" id="model" name="model" required>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-8">
+    <label for="imei">Укажите IMEI телефона</label>
+        </div>
+        <div class="col-md-4">
+    <input type="text" id="imei" name="imei" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+    <label for="defect">Заявленная неисправность:</label>
+        </div>
+        <div class="col-md-4">
+    <input type="textarea" id="defect" name="defect" style="width:200px; height:50px;" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+            <label for="comment">Состояние телефона:</label>
+        </div>
+        <div class="col-md-4">
+            <input type="textarea" id="comment" name="comment" style="width:200px; height:50px;" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+            <label for="full_set">Комплектность:</label>
+        </div>
+        <div class="col-md-4">
+            <input type="textarea" id="full_set" name="full_set" style="width:200px; height:50px;" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+            <label for="client">ФИО клиента:</label>
+        </div>
+        <div class="col-md-4">
+            <input type="text" id="client" name="client" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+    <label for="phone">Контактный номер клиента:</label>
+        </div>
+        <div class="col-md-4">
+    <input type="text" id="phone" name="phone" required>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+    <label for="date_of_purchase">Дата покупки:</label>
+        </div>
+        <div class="col-md-4">
+    <input type="date" id="date_of_purchase" name="date_of_purchase" required>
+    </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+        <label for="warranty">Гарантийный талон</label>
+        </div>
+        <div class="col-md-4">
+            <input type="checkbox" id="warranty" name="warranty" value="warranty">
+        </div>
+    </div>
+    <br>
+<input type="submit" value="Создать" class="btn btn-primary">
+<input type="reset" value="Очистить" class="btn btn-primary">
+</form>
+</div>
+</div>
+{% endblock%}

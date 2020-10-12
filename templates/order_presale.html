@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row m-3 pt-5 bg-light">
+        <a href="{% url 'DownloadPDF_presale' %}">
+            <button type="button" name="button" class="btn btn-primary">
+                Распечатать
+            </button>
+        </a>
+    </div>
+    <div class="col-8">
+        <h3>
+            Для создания новой заявки выйдите из системы и зайдите под своим логином.
+        </h3>
+    </div>
+</div>
+
+{% endblock %}

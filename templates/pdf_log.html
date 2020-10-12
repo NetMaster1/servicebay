@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<meta charset="UTF-8">
+
+<head>
+
+    <style type="text/css">
+        @font-face {
+            font-family: "Azoft Sans Italic";
+            src: url("webfonts/azoft-sans-italic.ttf")
+        }
+
+        table,
+        h1 {
+            font-family: "Azoft Sans Italic";
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid grey;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Реестр #{{registry.id}} от {{registry.created}} </h1>
+
+<h1>ООО Ритейл <br>
+    ИНН 5257173237
+</h1>
+
+<table style="width:100%">
+    <tr>
+        <th>Модель</th>
+        <th>IMEI</th>
+        <th>Неисправность</th>
+        <th>Состояние</th>
+        <th>Статус</th>
+    </tr>
+    {% for item in queryset_list%}
+
+    <tr>
+        <td>{{item.brand}} {{item.model}} </td>
+        <td>{{item.imei}}</td>
+        <td>{{item.defect}}</td>
+        <td>{{item.comment}}</td>
+        <td>{{item.status}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br><br>
+<span>
+<h1>Принял ________________________   
+Передал _______________________</h1>
+</span>
+</body>
+
+</html>

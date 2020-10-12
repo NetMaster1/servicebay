@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5 pt-5">
+        <div class="col-6">
+
+            <form action="{% url 'choice' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="choice">Выберите действие</label>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="log" id="choice">
+                    <span class="text-black">Просмотреть журнал</span>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="form" id="choice">
+                    <span class="text-black"> Создать новую заявку на гаранийный ремонт/диагностику</span><br>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="presale" id="choice">
+                    <span class="text-black">Заявка на ремонт предпродажного телефона</span><br><br>
+                </div>
+                <input type="submit" value="Выбрать" class="btn btn-primary btn-block">
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

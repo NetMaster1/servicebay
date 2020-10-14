@@ -37,13 +37,14 @@
                     <label for="status">Статус:</label>
                     <input list='status' name='status' placeholder="Статус">
                     <datalist id='status'>
-                        <option value="Принят на точке">Принят на точке</option>
-                        <option value="Предпродажный">Предпродажный</option>
-                        <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
-                        <option value="Отправлен на Горького">Отправлен на Горького</option>
-                        <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
-                        <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
-                        <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                    <option value="Принят на точке">Принят на точке</option>
+                    <option value="Предпродажный">Предпродажный</option>
+                    <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
+                    <option value="Отправлен на Горького">Отправлен на Горького</option>
+                    <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
+                    <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
+                    <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                    <option value="Отправлен в ЦД">Получен обратно</option>
                     </datalist>
                     <label for="status_update_date">Дата изменения статуса:</label>
                     <input type="date" id='status_update_date' name="status_update_date">
@@ -94,8 +95,8 @@
                 </div>
                 <div class="col-1">{{item.client}}</div>
                 <div class="col-2">{{item.created}}</div>
-                <div class="col-2">{{item.status_updated}}</div>
-                <!-- <div class="col-2">{{item.user.last_name}}</div> -->
+                <!-- <div class="col-2">{{item.status_updated}}</div> -->
+                <div class="col-2">{{item.user.last_name}}</div>
                 <div class="col-2">{{item.status}}</div>
             </div>
             {% endfor %}

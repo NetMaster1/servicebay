@@ -51,6 +51,7 @@
                             <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
                             <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
                             <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                            <option value="Отправлен в ЦД">Получен обратно</option>
                         </datalist>
                 </div>
                 <div class="col">
@@ -112,7 +113,23 @@
                 </div>
             </div>   
     </div>
-    </div>
-</div>
 
+    <div class="row">
+    <div class="col-md-6">
+        <h5>История изменения статуса</h5>
+    </div>
+    </div>
+            {% for status in queryset %}
+            <div class="row">
+            <div class="col-md-3">
+            {{status.status}}
+            </div>
+            <div class="col-md-3">
+            {{status.date_of_change}}
+            </div>
+            </div>
+            {% endfor %}
+
+
+</div>
 {% endblock %}

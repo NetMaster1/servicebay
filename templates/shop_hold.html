@@ -4,14 +4,14 @@
 
 <div class="container">
     <div class="row mt-5 p-3">
-        <h5 class='text-danger'>Заявки, которые находятся на точке более 14 дней с момента создания на {{date}}
-           
+        <h5 class='text-danger'>Заявки, которые находятся в мастерской более 30 дней на {{date}}
+
         </h5>
     </div>
 
-  <div class="row">
+    <div class="row">
         <div class="col-1">
-            <h5 >#</h5>
+            <h5>#</h5>
         </div>
         <div class="col-1">
             <h5>Точка</h5>
@@ -38,11 +38,11 @@
 
     </div>
 
-    
+
     <div class="row">
         <div class="col-12">
             {% for item in registry_items %}
-                   
+
             <div class="row border text-danger">
                 <div class="col-1">{{item.id}}</div>
                 <div class="col-1">{{item.shop}}</div>
@@ -53,7 +53,7 @@
                 <div class="col-2">{{item.user.last_name}}</div>
                 <div class="col-2">{{item.status}}</div>
             </div>
-               
+
             {% endfor %}
         </div>
     </div>

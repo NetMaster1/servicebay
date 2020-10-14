@@ -14,10 +14,20 @@
                     <input type="radio" name="choice" value="log" id="choice">
                     <span class="text-black">Просмотреть журнал</span>
                 </div>
+                =========================================================================
                 <div>
                     <input type="radio" name="choice" value="pending" id="choice">
-                    <span class="text-black">Просроченные заявки</span>
+                    <span class="text-danger">Заявки, не отправленные с точки в течение 14 дней</span>
                 </div>
+                <div>
+                    <input type="radio" name="choice" value="shop_hold" id="choice">
+                    <span class="text-danger">Заявки, которые находятся в мастерской более 30 дней</span>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="expiring" id="choice">
+                    <span class="text-danger">Заявки, срок гарантийного ремонта по которым, истекает через 14 дней</span>
+                </div>
+                ==========================================================================
                 <div>
                     <input type="radio" name="choice" value="form" id="choice">
                     <span class="text-black"> Создать новую заявку на гаранийный ремонт/диагностику</span><br>

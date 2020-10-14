@@ -26,6 +26,12 @@
     {% if 'pending' in request.path %}
     <a class="nav-link text-white" href="{% url 'choice' %}">Вернуться на главную</a>
     {% endif %}
+    {% if 'shop_hold' in request.path %}
+    <a class="nav-link text-white" href="{% url 'choice' %}">Вернуться на главную</a>
+    {% endif %}
+    {% if 'expiring' in request.path %}
+    <a class="nav-link text-white" href="{% url 'choice' %}">Вернуться на главную</a>
+    {% endif %}
     
       <a class="nav-link text-white" href="{% url 'logout' %}">
         <i class="fas fa-sign-out-alt"></i>

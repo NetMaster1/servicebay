@@ -11,13 +11,13 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
 
         if user is not None:
-            request.session.set_expiry(0)  #user session terminated on browser close
+            request.session.set_expiry(0)  #user session terminates on browser close
             #reuest.session.set_expiry(600) #user session terminates every 10 min
             auth.login(request, user)
             # messages.success(request, 'You are logged in now')
             return redirect ('choice')
         else:
-            # messages.error(request, "Invalid credentials. Please, try again")
+            messages.error(request, "Неправильные учетные данные, попробуйте еще раз")
             return redirect('login')
     else:
         return render(request, 'login.html')

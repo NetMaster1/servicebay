@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Registry, RegistryLine, RegistryPending, RegistryLinePending
+from .models import Item, Registry, RegistryLine, RegistryPending, RegistryLinePending, RegistryShopHold, RegistryLineShopHold, RegistryExpiring, RegistryLineExpiring, Status_change
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages, auth
@@ -24,7 +24,11 @@ def choice(request):
             elif option == 'log':
                 return redirect('log')
             elif option == 'pending':
-                return redirect ('pending')
+                return redirect('pending')
+            elif option == 'expiring':
+                return redirect('expiring')
+            elif option == 'shop_hold':
+                return redirect('shop_hold')
             else:
                 return redirect('presale')
         else:
@@ -55,7 +59,10 @@ def item(request):
                     item = Item.objects.create(
                          shop=shop, user=user, brand=brand, model=model, imei=imei, comment=comment, full_set=full_set, client=client, status=status, phone=phone, defect=defect, date_of_purchase=date_of_purchase, warranty=True, cheque=True
                     )
-                    item.save()
+                    # item.save()
+                    status_change_date = Status_change.objects.create(
+                        date_of_change=item.status_updated, status=item.status, imei=item.imei, brand=item.brand, model=item.model)
+                    # status_change_date.save()
                     return render(request, 'order_used.html')
                 else:
                     messages.error(request, ('Убедитесь в наличии чека'))
@@ -90,7 +97,9 @@ def presale(request):
             item = Item.objects.create(
                 shop=shop, user=user, brand=brand, model=model, imei=imei, status=status, defect=defect,
             )
-            item.save()
+            # item.save()
+            status_change_date = Status_change.objects.create(
+                date_of_change=item.status_updated, status=item.status, imei=item.imei, brand=item.brand, model=item.model)
             return render(request, 'order_presale.html')
         else:
             return render(request, 'presale.html')
@@ -117,8 +126,10 @@ def log(request):
 def card(request, item_id):
     if request.user.is_authenticated:
         item = Item.objects.get(id=item_id)
+        queryset = Status_change.objects.filter(imei=item.imei)
         context = {
             'item': item,
+            'queryset': queryset
         }
         return render(request, 'card.html', context)
     else:
@@ -130,12 +141,21 @@ def update(request, item_id):
             item = Item.objects.get(id=item_id)
             item.status = request.POST['status']
             item.save()
+            status_change_date = Status_change.objects.create(
+                date_of_change=item.status_updated,
+                status=item.status,
+                imei=item.imei,
+                brand=item.brand,
+                model=item.model)
+            status_change_date.save()
+            queryset=Status_change.objects.filter(imei=item.imei)
             context = {
                 'item': item,
+                'queryset': queryset
             }
             return render(request, 'card.html', context)
     else:
-        return render(request, 'login.html')
+        return redirect('login')
    
 def search(request):
     if request.user.is_authenticated:
@@ -207,7 +227,7 @@ def pending(request):
             if item.created==item.status_updated:
                 timedelta = date - item.created
                 td = timedelta.total_seconds()
-                if td > 10:
+                if td > 1209600:
                     RegistryLinePending.objects.create(
                         registry_pending=registry_pending,
                         user=item.user,
@@ -223,12 +243,7 @@ def pending(request):
                         client=item.client
                     )
                     item.save()
-        queryset = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
-
-        paginator = Paginator(queryset, 15)
-        page_number = request.GET.get('page')
-        queryset_list = paginator.get_page(page_number)
-
+        queryset_list = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
         context = {
             'queryset_list': queryset_list,
             'date': date,
@@ -236,6 +251,87 @@ def pending(request):
         return render(request, 'pending.html', context)
     else:
         return redirect ('login')
+
+
+def shop_hold(request):
+    if request.user.is_authenticated:
+        queryset = Item.objects.all()
+    # date = datetime.datetime.now().date
+    # date = datetime.datetime.now().year
+        date = datetime.date.today()
+        registry_shop_hold = RegistryShopHold.objects.create()
+        # registry_expiring.save()
+
+        for item in queryset:
+            if item.status == 'Отправлен в СМТЕЛ' or item.status=='Отправлен на Горького' or item.status=='Отправлен в другой сервис. центр':
+                timedelta = date - item.status_updated
+                td = timedelta.total_seconds()
+                if td > 2592000:
+                    RegistryLineShopHold.objects.create(
+                        registry_shop_hold=registry_shop_hold,
+                        user=item.user,
+                        shop=item.shop,
+                        brand=item.brand,
+                        model=item.model,
+                        imei=item.imei,
+                        date_of_purchase=item.date_of_purchase,
+                        phone=item.phone,
+                        defect=item.defect,
+                        comment=item.comment,
+                        status=item.status,
+                        client=item.client
+                    )
+                    # item.save()
+        queryset_list = RegistryLineShopHold.objects.filter(
+            registry_shop_hold=registry_shop_hold.id)
+
+        context = {
+            'queryset_list': queryset_list,
+            'date': date,
+        }
+        return render(request, 'shop_hold.html', context)
+    else:
+        return redirect('login')
+
+
+def expiring(request):
+    if request.user.is_authenticated:
+        queryset = Item.objects.all()
+    # date = datetime.datetime.now().date
+    # date = datetime.datetime.now().year
+        date = datetime.date.today()
+        registry_expiring = RegistryExpiring.objects.create()
+        # registry_expiring.save()
+
+        for item in queryset:
+                timedelta = date - item.created
+                td = timedelta.total_seconds()
+                if td > 2592000:
+                    RegistryLineExpiring.objects.create(
+                        registry_expiring=registry_expiring,
+                        user=item.user,
+                        shop=item.shop,
+                        brand=item.brand,
+                        model=item.model,
+                        imei=item.imei,
+                        date_of_purchase=item.date_of_purchase,
+                        phone=item.phone,
+                        defect=item.defect,
+                        comment=item.comment,
+                        status=item.status,
+                        client=item.client
+                    )
+                    # item.save()
+        queryset_list = RegistryLineExpiring.objects.filter(
+            registry_expiring=registry_expiring.id)
+
+        context = {
+            'queryset_list': queryset_list,
+            'date': date,
+        }
+        return render(request, 'expiring.html', context)
+    else:
+        return redirect('login')
 
 class DownloadPDF(View):
     # def get(self, request, *args, **kwargs):

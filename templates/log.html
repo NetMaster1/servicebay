@@ -3,10 +3,8 @@
 {% block content %}
 
 <div class="container">
-    <div class="row mt-5 p-2">
-        <h5>Для создания новой заявки выйдите из системы и войдите под своим логином.</h5>
-    </div>
-        <div class="row bg-light">
+    
+        <div class="row mt-5 pt-2 bg-light">
         <div class="col-md">
             <form action="{% url 'search' %}" method="POST">
                 {% csrf_token %}
@@ -85,7 +83,8 @@
         <div class="col-1">{{item.client}}</div>
         <!-- <div class="col-1">{{item.phone}}</div> -->
         <div class="col-2">{{item.created}}</div>
-        <div class="col-2">{{item.user.last_name}}</div>
+        <div class="col-2">{{item.status_updated}}</div>
+        <!-- <div class="col-2">{{item.user.last_name}}</div> -->
         <div class="col-2">{{item.status}}</div>
     </div>
     {% endfor %}

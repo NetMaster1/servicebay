@@ -2,15 +2,17 @@
 
 {% block content %}
 <div class="container">
-<div class="row mt-3 pt-5 justify-content-center">
+
+
+<div class="row mt-5 pt-5 justify-content-center">
     <!-- Alerts ========================== -->
     {% include 'partials/_alerts.html' %}
     <!-- ========================================== -->
-    <div class="col-md-8 bg-light p-3">
+    <div class="col-md-6 bg-light p-3">
     <form action="{% url 'item' %}" method='POST'>
         {% csrf_token %}
     <div class="row">    
-    <div class="col-md-8">
+    <div class="col-md-5">
     <label for="shop">Выберите магазин: </label>
     </div>
     <div class="col-md-4">
@@ -38,7 +40,7 @@
    
     <!-- ========================= -->
     <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-5">
     <label for="brand">Выберите производителя: </label>
     </div>
     <div class="col-md-4">
@@ -66,7 +68,7 @@
     <br>
     <!-- ========================================== -->
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="model">Укажите название модели</label>
         </div>
         <div class="col-md-4">
@@ -74,7 +76,7 @@
         </div>
     </div><br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
     <label for="imei">Укажите IMEI телефона</label>
         </div>
         <div class="col-md-4">
@@ -83,7 +85,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
     <label for="defect">Заявленная неисправность:</label>
         </div>
         <div class="col-md-4">
@@ -92,7 +94,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="comment">Состояние телефона:</label>
         </div>
         <div class="col-md-4">
@@ -101,7 +103,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="full_set">Комплектность:</label>
         </div>
         <div class="col-md-4">
@@ -110,7 +112,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="client">ФИО клиента:</label>
         </div>
         <div class="col-md-4">
@@ -119,7 +121,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
     <label for="phone">Контактный номер клиента:</label>
         </div>
         <div class="col-md-4">
@@ -128,7 +130,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
     <label for="date_of_purchase">Дата покупки:</label>
         </div>
         <div class="col-md-4">
@@ -137,7 +139,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="warranty">Наличие гарантийного талона:</label>
         </div>
         <div class="col-md-4">
@@ -146,7 +148,7 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <label for="cheque">Наличие чека:</label>
         </div>
         <div class="col-md-4">
@@ -156,14 +158,21 @@
     <br>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
         <input type="submit" value="Создать" class="btn btn-primary btn-block">
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
         <input type="reset" value="Очистить" class="btn btn-primary btn-block">
         </div>
+        </form>
+        <div class="col-md-3">
+        <a href="{% url 'choice' %}">
+            <button type="button" name="button" class="btn btn-primary btn-block">
+                Закрыть
+            </button>
+        </a>
+        </div>
     </div>
-</form>
 </div>
 </div>
 </div>

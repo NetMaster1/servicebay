@@ -11,6 +11,8 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
 
         if user is not None:
+            request.session.set_expiry(0)  #user session terminated on browser close
+            #reuest.session.set_expiry(600) #user session terminates every 10 min
             auth.login(request, user)
             # messages.success(request, 'You are logged in now')
             return redirect ('choice')
@@ -23,4 +25,4 @@ def login(request):
 def logout(request):
         auth.logout(request)
         # messages.success(request, 'Вы вышли из системы')
-        return redirect('index')
+        return redirect('login')

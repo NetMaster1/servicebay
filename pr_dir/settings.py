@@ -128,3 +128,7 @@ STATICFILES_DIRS = [
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+# user sessions terminate on browser close & after 10 min
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 300  # 5 seconds for testing
+SESSION_SAVE_EVERY_REQUEST = True

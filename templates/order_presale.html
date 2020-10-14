@@ -3,18 +3,23 @@
 {% block content %}
 
 <div class="container">
-    <div class="row m-3 pt-5 bg-light">
+    <div class="row m-5 pt-5 justify-content-center">
+        <div class="col-3">
         <a href="{% url 'DownloadPDF_presale' %}">
             <button type="button" name="button" class="btn btn-primary">
                 Распечатать
             </button>
         </a>
     </div>
-    <div class="col-8">
-        <h3>
-            Для создания новой заявки выйдите из системы и зайдите под своим логином.
-        </h3>
+    <div class="col-3">
+        <a href="{% url 'choice' %}">
+            <button type="button" name="button" class="btn btn-primary">
+                На главную
+            </button>
+        </a>
+
     </div>
+</div>
 </div>
 
 {% endblock %}

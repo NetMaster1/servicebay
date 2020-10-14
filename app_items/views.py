@@ -10,18 +10,9 @@ from django.http import HttpResponse
 import datetime
 from datetime import date
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
 
 # Create your views here.
-
-
-def index(request):
-    queryset_list = Item.objects.all()
-    context = {
-        'queryset_list': queryset_list,
-    }
-           
-    return render(request, 'index.html', context)
-
 
 def choice(request):
     if request.user.is_authenticated:
@@ -100,8 +91,7 @@ def presale(request):
                 shop=shop, user=user, brand=brand, model=model, imei=imei, status=status, defect=defect,
             )
             item.save()
-            return render (request, 'order_presale.html')
-            # return redirect('DownloadPDF_presale')
+            return render(request, 'order_presale.html')
         else:
             return render(request, 'presale.html')
     else:
@@ -146,8 +136,7 @@ def update(request, item_id):
             return render(request, 'card.html', context)
     else:
         return render(request, 'login.html')
-
-    
+   
 def search(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -168,10 +157,12 @@ def search(request):
                 queryset_list = queryset_list.filter(brand__icontains=brand)
             if user:
                 queryset_list = queryset_list.filter(user__icontains=user)
+            # if Q(start_date) | Q(end_date):
+            #     queryset_list = queryset_list.filter(created__range=(start_date, end_date))
             if start_date:
                 queryset_list = queryset_list.filter(created__gte=start_date)
             if end_date:
-                queryset_list = queryset_list.filter(created__lte=end_date)
+                queryset_list = queryset_list.filter(created__lte=end_date)   
             if status:
                 queryset_list = queryset_list.filter(status__icontains=status)
             if status_update_date:
@@ -195,53 +186,56 @@ def search(request):
                     status=item.status,
                     client=item.client
                 )
-            registry_items = RegistryLine.objects.filter(registry=registry)
 
-            context = {
-                    'queryset_list': queryset_list,
-                }
-            return render(request, 'search.html', context)
+        context = {
+            'queryset_list': queryset_list,
+            }
+        return render(request, 'search.html', context)
     else:
         return render(request, 'login.html')
 
 def pending(request):
-    queryset = Item.objects.all()
+    if request.user.is_authenticated:
+        queryset = Item.objects.all()
     # date = datetime.datetime.now().date
     # date = datetime.datetime.now().year
-    date = datetime.date.today()
-    registry_pending = RegistryPending.objects.create()
-    registry_pending.save()
+        date = datetime.date.today()
+        registry_pending = RegistryPending.objects.create()
+        registry_pending.save()
 
-    for item in queryset:
-        timedelta = date - item.created
-        td = timedelta.total_seconds()
-        if td>1209600:
-            RegistryLinePending.objects.create(
-                 registry_pending=registry_pending,
-                 user=item.user,
-                 shop=item.shop,
-                 brand=item.brand,
-                 model=item.model,
-                 imei=item.imei,
-                 date_of_purchase=item.date_of_purchase,
-                 phone=item.phone,
-                 defect=item.defect,
-                 comment=item.comment,
-                 status=item.status,
-                 client=item.client
-             )       
-    queryset = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
+        for item in queryset:
+            if item.created==item.status_updated:
+                timedelta = date - item.created
+                td = timedelta.total_seconds()
+                if td > 10:
+                    RegistryLinePending.objects.create(
+                        registry_pending=registry_pending,
+                        user=item.user,
+                        shop=item.shop,
+                        brand=item.brand,
+                        model=item.model,
+                        imei=item.imei,
+                        date_of_purchase=item.date_of_purchase,
+                        phone=item.phone,
+                        defect=item.defect,
+                        comment=item.comment,
+                        status=item.status,
+                        client=item.client
+                    )
+                    item.save()
+        queryset = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
 
-    paginator = Paginator(queryset, 15)
-    page_number = request.GET.get('page')
-    queryset_list = paginator.get_page(page_number)
+        paginator = Paginator(queryset, 15)
+        page_number = request.GET.get('page')
+        queryset_list = paginator.get_page(page_number)
 
-    context = {
-        'queryset_list': queryset_list,
-        'date': date,
-    }
-    return render(request, 'pending.html', context)
-
+        context = {
+            'queryset_list': queryset_list,
+            'date': date,
+        }
+        return render(request, 'pending.html', context)
+    else:
+        return redirect ('login')
 
 class DownloadPDF(View):
     # def get(self, request, *args, **kwargs):

@@ -11,8 +11,20 @@
 
   {% if user.is_authenticated %}
     <h5 class='text-light'>Пользователь: {{user.username}}</h5>
-    {% if not 'choice' in request.path %}
-      <a class="nav-link text-white" href="{% url 'log' %}">Перейти в журнал</a>
+    {% if 'log' in request.path %}
+      <a class="nav-link text-white" href="{% url 'choice' %}">Вернуться на главную</a>
+    {% endif %}
+    {% if 'search' in request.path %}
+    <a class="nav-link text-white" href="{% url 'log' %}">Вернуться в журнал</a>
+    {% endif %}
+    {% if 'card' in request.path %}
+    <a class="nav-link text-white" href="{% url 'log' %}">Вернуться в журнал</a>
+    {% endif %}
+    {% if 'update' in request.path %}
+    <a class="nav-link text-white" href="{% url 'log' %}">Вернуться в журнал</a>
+    {% endif %}
+    {% if 'pending' in request.path %}
+    <a class="nav-link text-white" href="{% url 'choice' %}">Вернуться на главную</a>
     {% endif %}
     
       <a class="nav-link text-white" href="{% url 'logout' %}">

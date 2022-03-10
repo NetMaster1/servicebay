@@ -6,19 +6,21 @@
 
     <style type="text/css">
         @font-face {
-            font-family: "Azoft Sans Italic";
-            src: url("webfonts/azoft-sans-italic.ttf")
+        font-family: "Azoft Sans Italic";
+        src: url("webfonts/azoft-sans-italic.ttf")
         }
 
         table,
-        h1,p {
+        h1,
+        p {
             font-family: "Azoft Sans Italic";
+            font-size: large;
         }
 
         table,
         th,
         td {
-            border: 1px solid grey;
+            border: 1px solid black;
         }
     </style>
 </head>
@@ -93,13 +95,13 @@
 <br>
 <br>
 <p>
-Принял ({{order.user.last_name}})     _______________________
-Сдал ({{order.client}})     _______________________
+Принял ({{order.user.last_name}}) __________________
+Сдал ({{order.client}}) __________________
 Место печати
 </p>
 <br>
 <p>Линия разреза
-=================================================================================================================
+==========================================================================================================
 </p>
 <h1>Квитанция #{{order.id}} от {{order.created}}</h1>
 <table style="width:100%">
@@ -169,8 +171,8 @@
 <br>
 <br>
 <p>
-    Принял ({{order.user.last_name}}) _______________________
-    Сдал ({{order.client}}) _______________________
+    Принял ({{order.user.last_name}}) __________________
+    Сдал ({{order.client}}) _________________
     Место печати
 </p>
 </body>

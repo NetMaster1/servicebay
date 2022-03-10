@@ -36,6 +36,13 @@
                     <input type="radio" name="choice" value="presale" id="choice">
                     <span class="text-black">Заявка на ремонт предпродажного телефона</span><br><br>
                 </div>
+                {% if request.user.username == 'Винокуров' or request.user.username == 'NetMaster' %}
+                <div>
+                    <input type="radio" name="choice" value="commercial" id="choice">
+                    <span class="text-black"> Создать новую заявку на коммерческий ремонт</span><br>
+                </div>
+                {% endif %}
+                ============================================================================
                 <input type="submit" value="Выбрать" class="btn btn-primary btn-block">
             </form>
 

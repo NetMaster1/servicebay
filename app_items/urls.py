@@ -11,6 +11,7 @@ urlpatterns = [
     path('pending', views.pending, name='pending'),
     path('expiring', views.expiring, name='expiring'),
     path('shop_hold', views.shop_hold, name='shop_hold'),
+    path('commercial', views.commercial, name='commercial'),
     
 
     # path('GeneratePDF/<pk>', views.GeneratePDF.as_view(), name="GeneratePDF"),

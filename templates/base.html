@@ -8,6 +8,7 @@
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/custom-css.css'%}">
+
   <link href="{% static 'webfonts/all.css' %}" rel="stylesheet">
   <link href="{% static 'webfonts/Roboto-Regular.ttf' %}" rel="stylesheet">
   <link href="{% static 'webfonts/roboto.css' %}" rel="stylesheet">
@@ -19,27 +20,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   
-  <title>i-store</title>
+  <title>servicebay</title>
 
 </head>
+
+
+  
 <body>
 
+    
     <!-- Navbar -->
    {% include 'partials/_navbar.html' %}
+
    {% block content %}
    {% endblock %}
 
-    <!-- {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-info" role="alert">
-      <button class="close" data-dismiss="alert">
-        <small><sup>x</sup></small>
-      </button>
-      {{ message }}
-    </div>
-    {% endfor%}
-    {% endif%}
-    </div> -->
+
+
 
 
   <!-- Bootstrap core JavaScript -->

@@ -4,41 +4,10 @@
 <div class="container">
 
 
-
     <div class="row mt-5 pt-5 justify-content-center">
         <div class="col-md-6 bg-light p-3">
-            <form action="{% url 'presale' %}" method='POST'>
+            <form action="{% url 'commercial' %}" method='POST'>
                 {% csrf_token %}
-                <!-- ========================== -->
-
-                <div class="row">
-                    <div class="col-md-5">
-                        <label for="shop">Выберите магазин: </label>
-                    </div>
-                    <div class="col-md-4">
-                        <!-- <select id="shop" name="shop" size='10' autofocus> -->
-                        <input list='shops' name='shop' required>
-                        <datalist id='shops'>
-                            <option value="Дзержинск">Дзержинск</option>
-                            <option value="Городец МБ">Городец МБ</option>
-                            <option value="Городец LS">Городец LS</option>
-                            <option value="Правдинск">Правдинск</option>
-                            <option value="Семенов МБ">Семенов МБ</option>
-                            <option value="Семенов LS">Семенов LS</option>
-                            <option value="Сормово">Сормово</option>
-                            <option value="Карусель">Карусель</option>
-                            <option value="Мончага">Мончага</option>
-                            <option value="Омега">Омега</option>
-                            <option value="Плаза">Плаза</option>
-                            <option value="Манго">Манго</option>
-                            <option value="Заволжье">Заволжье</option>
-                            <option value="Балахна">Балахна</option>
-                            <option value="Куб">Куб</option>
-                            <option value="Офис">Офис</option>
-                        </datalist>
-                    </div>
-                </div>
-                <br>
 
                 <!-- ========================= -->
                 <div class="row">
@@ -65,6 +34,8 @@
                             <option value="Alcatel">Alcatel</option>
                             <option value="Jinga">Jinga</option>
                             <option value="Itel">Itel</option>
+                            <option value="Ricoh">Ricoh</option>
+                            <option value="HP">HP</option>
                             <option value="others">Другой</option>
                         </datalist>
                     </div>

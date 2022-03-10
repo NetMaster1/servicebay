@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Item, Registry, RegistryLine, RegistryPending, RegistryLinePending, RegistryShopHold, RegistryLineShopHold, RegistryExpiring, RegistryLineExpiring, Status_change
+from .models import Item, Registry, RegistryLine, Status_change
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages, auth
@@ -11,8 +11,13 @@ import datetime
 from datetime import date
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
+import nexmo
+import os
+from twilio.rest import Client
+from django.forms.fields import DateField
 
 # Create your views here.
+
 
 def choice(request):
     if request.user.is_authenticated:
@@ -29,13 +34,14 @@ def choice(request):
                 return redirect('expiring')
             elif option == 'shop_hold':
                 return redirect('shop_hold')
+            elif option == 'commercial':
+                return redirect('commercial')
             else:
                 return redirect('presale')
         else:
             return render(request, 'choice.html')
     else:
         return redirect('login')
-
 
 def item(request):
     if request.user.is_authenticated:
@@ -52,35 +58,64 @@ def item(request):
             phone = request.POST['phone']
             defect = request.POST['defect']
             date_of_purchase = request.POST['date_of_purchase']
-            warranty = request.POST.get('warranty', False)
-            if warranty:
-                cheque = request.POST.get('cheque', False)
-                if cheque:
-                    item = Item.objects.create(
-                         shop=shop, user=user, brand=brand, model=model, imei=imei, comment=comment, full_set=full_set, client=client, status=status, phone=phone, defect=defect, date_of_purchase=date_of_purchase, warranty=True, cheque=True
-                    )
-                    # item.save()
-                    status_change_date = Status_change.objects.create(
-                        date_of_change=item.status_updated, status=item.status, imei=item.imei, brand=item.brand, model=item.model)
-                    # status_change_date.save()
-                    return render(request, 'order_used.html')
-                else:
-                    messages.error(request, ('Убедитесь в наличии чека'))
-                    # return redirect('item')
-                    return render (request, 'form.html')
-           
+
+            #======================Counting Number of Days From date of purchase to today=============
+            field = DateField()
+            formatted_date = field.to_python(date_of_purchase)
+            delta = datetime.date.today() - formatted_date
+            
+            # current_date=datetime.date.today()
+            # date = datetime.datetime.strptime(date_of_purchase, "%Y-%m-%d")
+            # delta=current_date-date
+            if delta.days > 365:
+                messages.error(request, "Гарантийный срок истек")
+                return redirect("item")
             else:
-                messages.error(request, ('Убедитесь в наличии гарантийного талона или узнайте в офисе об электронной гарантии'))
-                return redirect('item')
-            # try:
-            #     if request.POST['warranty']:
-            #         warranty = True
-            # except KeyError:
-            #     warranty = False      
+                # try:
+                #     if request.POST['warranty']:
+                #         warranty = True
+                # except KeyError:
+                #     warranty = False
+                warranty = request.POST.get('warranty', False)
+                if warranty:
+                    cheque = request.POST.get('cheque', False)
+                    if cheque:
+                        item = Item.objects.create(
+                            shop=shop,
+                            user=request.user,
+                            brand=brand,
+                            model=model,
+                            imei=imei,
+                            comment=comment,
+                            full_set=full_set,
+                            client=client,
+                            status=status,
+                            phone=phone,
+                            defect=defect,
+                            date_of_purchase=date_of_purchase,
+                            warranty=True,
+                            cheque=True,
+                        )
+                        status_change_date = Status_change.objects.create(
+                            date_of_change=item.status_updated,
+                            status=item.status,
+                            imei=item.imei,
+                            brand=item.brand,
+                            model=item.model
+                        )
+                        return render(request, 'order_used.html')
+                    else:
+                        messages.error(request, ('Убедитесь в наличии чека'))
+                        #return redirect('item')
+                        return render(request, 'form.html')
+                else:
+                    messages.error(
+                        request, 'Убедитесь в наличии гарантийного талона или узнайте в офисе об электронной гарантии')
+                    return redirect('item')   
         else:
             return render(request, 'form.html')
     else:
-        return render(request, 'login.html')
+        return redirect('login')
 
 
 def presale(request):
@@ -107,14 +142,36 @@ def presale(request):
         return render(request, 'login.html')
 
 
+def commercial(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            user = request.user
+            brand = request.POST['brand']
+            model = request.POST['model']
+            imei = request.POST['imei']
+            status = "Коммерческий"
+            defect = request.POST['defect']
+
+            item = Item.objects.create(
+                user=user, brand=brand, model=model, imei=imei, status=status, defect=defect,
+            )
+            # item.save()
+            status_change_date = Status_change.objects.create(
+                date_of_change=item.status_updated, status=item.status, imei=item.imei, brand=item.brand, model=item.model)
+            return render(request, 'order_presale.html')
+        else:
+            return render(request, 'commercial.html')
+    else:
+        return render(request, 'login.html')
+
+
 def log(request):
     if request.user.is_authenticated:
-        queryset = Item.objects.order_by('created')
+        queryset = Item.objects.order_by('-id')
 
-        paginator = Paginator(queryset, 17)
+        paginator = Paginator(queryset, 50)
         page_number = request.GET.get('page')
         queryset_list = paginator.get_page(page_number)
-
 
         context = {
             'queryset_list': queryset_list,
@@ -122,6 +179,7 @@ def log(request):
         return render(request, 'log.html', context)
     else:
         return render(request, 'login.html')
+
 
 def card(request, item_id):
     if request.user.is_authenticated:
@@ -134,11 +192,12 @@ def card(request, item_id):
         return render(request, 'card.html', context)
     else:
         return render(request, 'login.html')
-        
+
+
 def update(request, item_id):
     if request.user.is_authenticated:
+        item = Item.objects.get(id=item_id)
         if request.method == "POST":
-            item = Item.objects.get(id=item_id)
             item.status = request.POST['status']
             item.save()
             status_change_date = Status_change.objects.create(
@@ -148,7 +207,32 @@ def update(request, item_id):
                 brand=item.brand,
                 model=item.model)
             status_change_date.save()
-            queryset=Status_change.objects.filter(imei=item.imei)
+            queryset = Status_change.objects.filter(imei=item.imei)
+            if item.status == 'Отправлен на точку':
+                if item.phone:
+                    # ===========Twilo API==================
+                    account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
+                    auth_token = 'fe2f8ad2d1675aeed088b2d33ebf9fc0'
+                    client = Client(account_sid, auth_token)
+                    message = client.messages \
+                        .create(
+                            body=f"Ваш телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра в течение дня будет доставлен на точку. Пожалуйста, заберите его.",
+                            from_='+16624993114',
+                            to=item.phone
+                        )
+                    print(message.sid)
+                    messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
+                # ================================
+                else:
+                    messages.error(request, "Сообщение не было отослано. Проверьте баланс или тип заявки.")
+                # =============Nexmo API===========
+                # client = nexmo.Client(key='264369ff', secret='cCGl0q81eNJ7mbWc')
+                # client.send_message({
+                #     'from': 'Vonage APIs',
+                #     'to': item.phone,
+                #     'text': 'Your phone is ready. Please, pick it up',
+                # })
+                # ======================================
             context = {
                 'item': item,
                 'queryset': queryset
@@ -156,7 +240,8 @@ def update(request, item_id):
             return render(request, 'card.html', context)
     else:
         return redirect('login')
-   
+
+
 def search(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -182,11 +267,12 @@ def search(request):
             if start_date:
                 queryset_list = queryset_list.filter(created__gte=start_date)
             if end_date:
-                queryset_list = queryset_list.filter(created__lte=end_date)   
+                queryset_list = queryset_list.filter(created__lte=end_date)
             if status:
                 queryset_list = queryset_list.filter(status__icontains=status)
             if status_update_date:
-                queryset_list = queryset_list.filter(status_updated=status_update_date)
+                queryset_list = queryset_list.filter(
+                    status_updated=status_update_date)
 
             registry = Registry.objects.create()
             registry.save()
@@ -209,82 +295,44 @@ def search(request):
 
         context = {
             'queryset_list': queryset_list,
-            }
+        }
         return render(request, 'search.html', context)
     else:
         return render(request, 'login.html')
 
+
 def pending(request):
     if request.user.is_authenticated:
-        queryset = Item.objects.all()
-    # date = datetime.datetime.now().date
-    # date = datetime.datetime.now().year
         date = datetime.date.today()
-        registry_pending = RegistryPending.objects.create()
-        registry_pending.save()
-
+        queryset = Item.objects.all()
         for item in queryset:
-            if item.created==item.status_updated:
-                timedelta = date - item.created
-                td = timedelta.total_seconds()
-                if td > 1209600:
-                    RegistryLinePending.objects.create(
-                        registry_pending=registry_pending,
-                        user=item.user,
-                        shop=item.shop,
-                        brand=item.brand,
-                        model=item.model,
-                        imei=item.imei,
-                        date_of_purchase=item.date_of_purchase,
-                        phone=item.phone,
-                        defect=item.defect,
-                        comment=item.comment,
-                        status=item.status,
-                        client=item.client
-                    )
-                    item.save()
-        queryset_list = RegistryLinePending.objects.filter(registry_pending=registry_pending.id)
+            # if item.created == item.status_updated:
+            delta = date-item.created
+            item.delta_pending = delta.days
+            item.save()
+        queryset_list = Item.objects.filter(
+            status='Принят на точке', delta_pending__gte=14)
+
         context = {
             'queryset_list': queryset_list,
             'date': date,
         }
         return render(request, 'pending.html', context)
     else:
-        return redirect ('login')
+        return redirect('login')
 
 
 def shop_hold(request):
     if request.user.is_authenticated:
-        queryset = Item.objects.all()
-    # date = datetime.datetime.now().date
-    # date = datetime.datetime.now().year
         date = datetime.date.today()
-        registry_shop_hold = RegistryShopHold.objects.create()
-        # registry_expiring.save()
-
+        queryset = Item.objects.all()
         for item in queryset:
-            if item.status == 'Отправлен в СМТЕЛ' or item.status=='Отправлен на Горького' or item.status=='Отправлен в другой сервис. центр':
-                timedelta = date - item.status_updated
-                td = timedelta.total_seconds()
-                if td > 2592000:
-                    RegistryLineShopHold.objects.create(
-                        registry_shop_hold=registry_shop_hold,
-                        user=item.user,
-                        shop=item.shop,
-                        brand=item.brand,
-                        model=item.model,
-                        imei=item.imei,
-                        date_of_purchase=item.date_of_purchase,
-                        phone=item.phone,
-                        defect=item.defect,
-                        comment=item.comment,
-                        status=item.status,
-                        client=item.client
-                    )
-                    # item.save()
-        queryset_list = RegistryLineShopHold.objects.filter(
-            registry_shop_hold=registry_shop_hold.id)
-
+            if item.status == 'Отправлен в СМТЕЛ' or item.status == 'Отправлен на Горького' or item.status == 'Отправлен в другой сервис. центр':
+                delta = date - item.created
+                item.delta_shop_hold = delta.days
+                item.save()
+        queryset_list = Item.objects.filter(
+            status='Отправлен в СМТЕЛ', delta_shop_hold__gte=35)
         context = {
             'queryset_list': queryset_list,
             'date': date,
@@ -297,33 +345,14 @@ def shop_hold(request):
 def expiring(request):
     if request.user.is_authenticated:
         queryset = Item.objects.all()
-    # date = datetime.datetime.now().date
-    # date = datetime.datetime.now().year
         date = datetime.date.today()
-        registry_expiring = RegistryExpiring.objects.create()
-        # registry_expiring.save()
 
         for item in queryset:
-                timedelta = date - item.created
-                td = timedelta.total_seconds()
-                if td > 2592000:
-                    RegistryLineExpiring.objects.create(
-                        registry_expiring=registry_expiring,
-                        user=item.user,
-                        shop=item.shop,
-                        brand=item.brand,
-                        model=item.model,
-                        imei=item.imei,
-                        date_of_purchase=item.date_of_purchase,
-                        phone=item.phone,
-                        defect=item.defect,
-                        comment=item.comment,
-                        status=item.status,
-                        client=item.client
-                    )
-                    # item.save()
-        queryset_list = RegistryLineExpiring.objects.filter(
-            registry_expiring=registry_expiring.id)
+            delta = date - item.created
+            item.delta_expiring = delta.days
+            item.save()
+
+        queryset_list = Item.objects.filter(delta_expiring__gte=37)
 
         context = {
             'queryset_list': queryset_list,
@@ -332,6 +361,7 @@ def expiring(request):
         return render(request, 'expiring.html', context)
     else:
         return redirect('login')
+
 
 class DownloadPDF(View):
     # def get(self, request, *args, **kwargs):

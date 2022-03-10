@@ -3,55 +3,58 @@
 {% block content %}
 
 <div class="container">
-<div class="row mt-5 pt-3 bg-light">
-        <form action="{% url 'search' %}" method="POST">
-            {% csrf_token %}
-
-            <div class="row p-1">
-                <div class="col-12">
-                <span>
-                    <input type="text" name="imei" placeholder="IMEI">
-                    <input type="text" name="shop" placeholder="Торговая точка">
-                    <input type="text" name="brand" placeholder="Производитель">
-                    <input type="text" name="user" placeholder="Приемщик">
-
-                    <input type="submit" value="Применить" class="btn btn-primary">
-                    <input type="reset" value="Сбросить" class="btn btn-primary">
-
-                    {% if 'search' in request.path%}
-                    <a href="{% url 'DownloadPDF_log' %}">
-                    <button type="button" name="button" class="btn btn-primary">
-                        Распечатать
-                    </button>
-                    </a>
-                    {% endif %}
-                </span>
+    <div class="row mt-5 pt-2 bg-light">
+        <div class="col-md">
+            <form action="{% url 'search' %}" method="POST">
+                {% csrf_token %}
+    
+                <div class="row p-1">
+                    <span>
+                        <input type="text" name="imei" placeholder="IMEI">
+                        <input type="text" name="shop" placeholder="Торговая точка">
+                        <input type="text" name="brand" placeholder="Производитель">
+                        <input type="text" name="user" placeholder="Приемщик">
+    
+                        <input type="submit" value="Применить" class="btn btn-primary">
+                        <input type="reset" value="Сбросить" class="btn btn-primary">
+    
+                        {% if 'search' in request.path%}
+                        <a href="{% url 'DownloadPDF_log' %}">
+                            <button type="button" name="button" class="btn btn-primary">
+                                Распечатать
+                            </button>
+                        </a>
+                        {% endif %}
+                    </span>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <label for="start_date">Дата принятия в ремонт:</label>
-                    <input type="date" id='start_date' name="start_date">
-                    <input type="date" id='end_date' name="end_date">
-                    <label for="status">Статус:</label>
-                    <input list='status' name='status' placeholder="Статус">
-                    <datalist id='status'>
-                    <option value="Принят на точке">Принят на точке</option>
-                    <option value="Предпродажный">Предпродажный</option>
-                    <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
-                    <option value="Отправлен на Горького">Отправлен на Горького</option>
-                    <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
-                    <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
-                    <option value="Отправлен в ЦД">Отправлен в ЦД</option>
-                    <option value="Отправлен в ЦД">Получен обратно</option>
-                    </datalist>
-                    <label for="status_update_date">Дата изменения статуса:</label>
-                    <input type="date" id='status_update_date' name="status_update_date">
+    
+                <div class="row">
+                    <div class="col">
+                        <label for="start_date">Дата принятия в ремонт:</label>
+                        <input type="date" id='start_date' name="start_date">
+                        <input type="date" id='end_date' name="end_date">
+                        <label for="status">Статус:</label>
+                        <input list='status' name='status' placeholder="Статус">
+                        <datalist id='status'>
+                            <option value="Принят на точке">Принят на точке</option>
+                            <option value="Предпродажный">Предпродажный</option>
+                            <option value="Ожидает отправки в АйтиОпт">Ожидает отправки в АйтиОпт</option>
+                            <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
+                            <option value="Отправлен на Горького">Отправлен на Горького</option>
+                            <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
+                            <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
+                            <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                            <option value="Получен обратно от контрагента">Получен обратно от контрагента</option>
+                            <option value="Получена компенсация">Получена компенсация</option>
+                            <option value="Списан">Списан</option>
+                        </datalist>
+                        <label for="status_update_date">Дата изменения статуса:</label>
+                        <input type="date" id='status_update_date' name="status_update_date">
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
+    </div><br>
 
     <div class="row">
         <div class="col-1">

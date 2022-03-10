@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'servicebay',
-        'USER': 'postgres',
+        'USER': 'servicebayadmin',
         'PASSWORD': 'ylhio65v',
         'HOST': 'localhost',
         'PORT': '5432'
@@ -144,3 +144,8 @@ MESSAGE_TAGS = {
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 300  # 5 seconds for testing
 SESSION_SAVE_EVERY_REQUEST = True
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

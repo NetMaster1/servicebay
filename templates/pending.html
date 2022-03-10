@@ -41,17 +41,20 @@
     
     <div class="row">
         <div class="col-12">
-            {% for item in registry_items %}
+            {% for item in queryset_list %}
                    
             <div class="row border text-danger">
                 <div class="col-1">{{item.id}}</div>
                 <div class="col-1">{{item.shop}}</div>
-                <div class="col-1">{{item.brand}} {{item.model}}</div>
-                <div class="col-2">{{item.imei}}</div>
-                <div class="col-1">{{item.client}}</div>
+                <div class="col-1">{{item.brand}}</div>
+                <div class="col-2">
+                <a href="{% url 'card' item.id %}">
+                    {{item.imei}}</a>
+                </div>
+                <div class="col-2">{{item.client}}</div>
                 <div class="col-2">{{item.created}}</div>
                 <div class="col-2">{{item.user.last_name}}</div>
-                <div class="col-2">{{item.status}}</div>
+                <div class="col-1">{{item.status}}</div>
             </div>
                
             {% endfor %}

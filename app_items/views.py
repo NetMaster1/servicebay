@@ -205,18 +205,27 @@ def update(request, item_id):
             queryset = Status_change.objects.filter(imei=item.imei)
             if item.status == 'Отправлен на точку':
                 if item.phone:
+                    #=============================Smsc API=======================
+                    #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
+                    phone=item.phone
+                    message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
+                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
+                    base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
+                    url=base_url.format(phone, message)
+                    api_request=requests.get(url)
+                    
                     # ===========Twilo API==================
-                    account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
-                    auth_token = '264094dd9b5cb2c4e5f1ca939d1cd4e0'
-                    client = Client(account_sid, auth_token)
-                    message = client.messages \
-                        .create(
-                            body=f"Ваш телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра в течение дня будет доставлен на точку. Пожалуйста, заберите его.",
-                            from_='+16624993114',
-                            to=item.phone
-                        )
-                    print(message.sid)
-                    messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
+                    #account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
+                    #auth_token = '264094dd9b5cb2c4e5f1ca939d1cd4e0'
+                    #client = Client(account_sid, auth_token)
+                    #message = client.messages \
+                    #    .create(
+                     #       body=f"Ваш телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра в течение дня будет доставлен на точку. Пожалуйста, заберите его.",
+                     #       from_='+16624993114',
+                     #       to=item.phone
+                    #    )
+                    #print(message.sid)
+                    #messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
                 # ================================
                 else:
                     messages.error(request, "Сообщение не было отослано. Проверьте баланс или тип заявки.")

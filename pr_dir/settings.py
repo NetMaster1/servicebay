@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iyk$#3##1&uvp1-gbn7%pagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
+SECRET_KEY = 'iyk$#3asdfsfs##1&uvp1-gbn7%pgfgdfgdfgsagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['servicebay.ru', 'www.serviceby.ru']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',  'servicebay.ru', 'www.serviceby.ru']
 
 
 # Application definition
@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # 'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'servicebay',
-        'USER': 'servicebayadmin',
+        'USER': 'postgres',
         'PASSWORD': 'ylhio65v',
         'HOST': 'localhost',
         'PORT': '5432'
@@ -145,7 +145,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 300  # 5 seconds for testing
 SESSION_SAVE_EVERY_REQUEST = True
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+
+# try:
+#     from .local_settings import *
+# except ImportError:
+#     pass

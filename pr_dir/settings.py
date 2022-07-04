@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'iyk$#3##1&uvp1-gbn7%pagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['servicebay.ru', 'www.serviceby.ru']
 
 
 # Application definition

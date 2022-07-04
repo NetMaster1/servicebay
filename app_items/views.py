@@ -117,7 +117,6 @@ def item(request):
     else:
         return redirect('login')
 
-
 def presale(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -141,7 +140,6 @@ def presale(request):
     else:
         return render(request, 'login.html')
 
-
 def commercial(request):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -164,7 +162,6 @@ def commercial(request):
     else:
         return render(request, 'login.html')
 
-
 def log(request):
     if request.user.is_authenticated:
         queryset = Item.objects.order_by('-id')
@@ -180,7 +177,6 @@ def log(request):
     else:
         return render(request, 'login.html')
 
-
 def card(request, item_id):
     if request.user.is_authenticated:
         item = Item.objects.get(id=item_id)
@@ -192,7 +188,6 @@ def card(request, item_id):
         return render(request, 'card.html', context)
     else:
         return render(request, 'login.html')
-
 
 def update(request, item_id):
     if request.user.is_authenticated:
@@ -212,7 +207,7 @@ def update(request, item_id):
                 if item.phone:
                     # ===========Twilo API==================
                     account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
-                    auth_token = 'fe2f8ad2d1675aeed088b2d33ebf9fc0'
+                    auth_token = '264094dd9b5cb2c4e5f1ca939d1cd4e0'
                     client = Client(account_sid, auth_token)
                     message = client.messages \
                         .create(
@@ -240,7 +235,6 @@ def update(request, item_id):
             return render(request, 'card.html', context)
     else:
         return redirect('login')
-
 
 def search(request):
     if request.user.is_authenticated:
@@ -300,7 +294,6 @@ def search(request):
     else:
         return render(request, 'login.html')
 
-
 def pending(request):
     if request.user.is_authenticated:
         date = datetime.date.today()
@@ -321,7 +314,6 @@ def pending(request):
     else:
         return redirect('login')
 
-
 def shop_hold(request):
     if request.user.is_authenticated:
         date = datetime.date.today()
@@ -340,7 +332,6 @@ def shop_hold(request):
         return render(request, 'shop_hold.html', context)
     else:
         return redirect('login')
-
 
 def expiring(request):
     if request.user.is_authenticated:
@@ -362,7 +353,6 @@ def expiring(request):
     else:
         return redirect('login')
 
-
 class DownloadPDF(View):
     # def get(self, request, *args, **kwargs):
     def get(self, request):
@@ -377,7 +367,6 @@ class DownloadPDF(View):
         content = "attachment; filename='%s'" % (filename)
         response['Content-Disposition'] = content
         return response
-
 
 class DownloadPDF_log(View):
     # def get(self, request, *args, **kwargs):
@@ -394,7 +383,6 @@ class DownloadPDF_log(View):
         content = "attachment; filename='%s'" % (filename)
         response['Content-Disposition'] = content
         return response
-
 
 class DownloadPDF_presale(View):
     # def get(self, request, *args, **kwargs):

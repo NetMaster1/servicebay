@@ -10,7 +10,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'servicebay',
-        'USER': 'postgres',
+        'USER': 'servicebayadmin',
         'PASSWORD': 'ylhio65v',
         'HOST': 'localhost',
         'PORT': '5432'

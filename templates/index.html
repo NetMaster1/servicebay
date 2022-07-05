@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+{% block content%}
+
+<div class="container">
+    <div class="row mt-5 pt-5">
+
+        
+        <div class="col-6 justify-content-center align-items-center">
+            <h3 class="text-primary">Программа для учета телефонов, сданных в ремонт.<br><br>
+
+                {% if user.is_authenticated %}
+                <div>
+            Для начала рыботы выйдите из текущей сессии нажав кнопку
+                </div><br>
+                <div>
+                <button type="button" class="btn btn-primary">
+                    <a class="text-white" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Выйти
+                    </a>
+                    </button>
+                </div>
+                <br>
+                {% else %}
+            <div>
+            Bвойдите под своим логином и паролем нажав кнопку 
+            </div><br>
+    <button type="button" class="btn btn-primary">
+    <a class="text-white" href="{% url 'login' %}">
+        <i class="fas fa-sign-in-alt"></i>
+        Войти
+    </a>
+    </button>
+    {% endif %}
+        
+        
+        </div>
+        </div>
+    </div>
+
+
+{% endblock%}

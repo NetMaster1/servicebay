@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row m-5 pt-5 justify-content-center">
+        <div class="col-3">
+            <a href="{% url 'DownloadPDF' %}">
+                <button type="button" name="button" class="btn btn-primary">
+                    Распечатать
+                </button>
+            </a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'choice' %}">
+                <button type="button" name="button" class="btn btn-primary">
+                    На главную
+                </button>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

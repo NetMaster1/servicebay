@@ -1,0 +1,90 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="container">
+
+
+    <div class="row mt-5 pt-5 justify-content-center">
+        <div class="col-md-6 bg-light p-3">
+            <form action="{% url 'commercial' %}" method='POST'>
+                {% csrf_token %}
+
+                <!-- ========================= -->
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="brand">Выберите производителя: </label>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- <select id="brand" name="brand"> -->
+                        <input list='brands' name='brand' required>
+                        <datalist id='brands'>
+                            <option value="Samsung">Samsung</option>
+                            <option value="Honor">Honor</option>
+                            <option value="Huawei">Huawei</option>
+                            <option value="Maxvi">Maxvi</option>
+                            <option value="Inoi">Inoi</option>
+                            <option value="Nokia">Nokia</option>
+                            <option value="Prestigio">Presigio</option>
+                            <option value="Sony">Sony</option>
+                            <option value="Xiaomi">Xiaomi</option>
+                            <option value="ZTE">ZTE</option>
+                            <option value="Oppo">Oppo</option>
+                            <option value="BQ">BQ</option>
+                            <option value="Vertex">Vertex</option>
+                            <option value="Alcatel">Alcatel</option>
+                            <option value="Jinga">Jinga</option>
+                            <option value="Itel">Itel</option>
+                            <option value="Ricoh">Ricoh</option>
+                            <option value="HP">HP</option>
+                            <option value="others">Другой</option>
+                        </datalist>
+                    </div>
+                </div>
+                <br>
+                <!-- ========================================== -->
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="model">Укажите название модели</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="model" name="model" required>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="imei">Укажите IMEI телефона</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="imei" name="imei" required>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="defect">Неисправность:</label>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="textarea" id="defect" name="defect" style="width:200px; height:50px;" required>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="submit" value="Создать" class="btn btn-primary btn-block">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="reset" value="Очистить" class="btn btn-primary btn-block">
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'choice' %}">
+                            <button type="button" name="button" class="btn btn-primary btn-block">
+                                Закрыть
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}

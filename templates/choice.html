@@ -1,0 +1,53 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5 pt-5">
+        <div class="col-6">
+
+            <form action="{% url 'choice' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="choice"><h5>Выберите действие</h5></label>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="log" id="choice">
+                    <span class="text-black">Просмотреть журнал</span>
+                </div>
+                =========================================================================
+                <div>
+                    <input type="radio" name="choice" value="pending" id="choice">
+                    <span class="text-danger">Заявки, не отправленные с точки в течение 14 дней</span>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="shop_hold" id="choice">
+                    <span class="text-danger">Заявки, которые находятся в мастерской более 30 дней</span>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="expiring" id="choice">
+                    <span class="text-danger">Заявки, срок гарантийного ремонта по которым, истекает через 14 дней</span>
+                </div>
+                ==========================================================================
+                <div>
+                    <input type="radio" name="choice" value="form" id="choice">
+                    <span class="text-black"> Создать новую заявку на гаранийный ремонт/диагностику</span><br>
+                </div>
+                <div>
+                    <input type="radio" name="choice" value="presale" id="choice">
+                    <span class="text-black">Заявка на ремонт предпродажного телефона</span><br><br>
+                </div>
+                {% if request.user.username == 'Винокуров' or request.user.username == 'NetMaster' %}
+                <div>
+                    <input type="radio" name="choice" value="commercial" id="choice">
+                    <span class="text-black"> Создать новую заявку на коммерческий ремонт</span><br>
+                </div>
+                {% endif %}
+                ============================================================================
+                <input type="submit" value="Выбрать" class="btn btn-primary btn-block">
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

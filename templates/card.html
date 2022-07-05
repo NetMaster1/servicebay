@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row m-3 pt-5 bg-light">
+            <!-- =====================Message Module===================== -->
+            <div class="container">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-info" role="alert">
+                    <!-- <button class="close" data-dismiss="alert">
+                                                            <small><sup>x</sup></small>
+                                                        </button> -->
+                    {{ message }}
+                </div>
+                {% endfor%}
+                {% endif%}
+            </div>
+            <!-- ====================== End of Message Module ==================== -->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-3">
+                    Торговая точка
+                </div>
+                <div class="col-3">
+                    {{item.shop}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Модель
+                </div>
+                <div class="col-3">
+                    {{item.brand}}
+                    {{item.model}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    IMEI
+                </div>
+                <div class="col-3">
+                    {{item.imei}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Текущий статус
+                </div>
+                <div class="col-3">
+                    {{item.status}}
+                </div>
+
+                {% if request.user.username == 'Винокуров' or request.user.username == 'NetMaster' %}
+                <div class="col-3">
+                    <form action="{% url 'update' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <input list='status' name='status' placeholder="Изменить статус" required>
+                        <datalist id='status'>
+                            <option value="Принят на точке">Принят на точке</option>
+                            <option value="Предпродажный">Предпродажный</option>
+                            <option value="Ожидает отправки в АйтиОпт">Ожидает отправки в АйтиОпт</option>
+                            <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
+                            <option value="Отправлен на Горького">Отправлен на Горького</option>
+                            <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
+                            <option value="Отправлен в коммерческий ремонт">Отправлен в коммерческий ремонт</option>
+                            <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
+                            <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                            <option value="Отправлен в РТК">Отправлен в РТК</option>
+                            <option value="Отправлен другому поставщику">Отправлен другому поставщику</option>
+                            <option value="Получен обратно от поставщика">Получен обратно от поставщика</option>
+                            <option value="Получен Акт НРП">Получен Акт НРП</option>
+                            <option value="Получена компенсация">Получена компенсация</option>
+                            <option value="Отправлен на точку">Отправлен на точку</option>
+                            <option value="Сделан возврат">Сделан возврат</option>
+                            <option value="Перемещен на склад Ремонт">Перемещен на склад Ремонт</option>
+                            <option value="Получена компенсация">Получена компенсация</option>
+                            <option value="Списан">Списан</option>
+                        </datalist>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Изменить" class="btn btn-primary">
+                    <input type="reset" value="Очистить" class="btn btn-primary">
+                </div>
+                </form>
+                {% endif %}
+
+            </div>
+                <div class="row">
+                    <div class="col-3">
+                        Дата покупки:
+                    </div>
+                    <div class="col-3">
+                        {{item.date_of_purchase}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Дата приема в ремонт:
+                    </div>
+                    <div class="col-3">
+                        {{item.created}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Дата изменения статуса:
+                    </div>
+                    <div class="col-3">
+                        {{item.status_updated}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Неисправность:
+                    </div>
+                    <div class="col-3">
+                        {{item.defect}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Клиент:
+                    </div>
+                    <div class="col-3">
+                        {{item.client}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Телефон:
+                    </div>
+                    <div class="col-3">
+                        {{item.phone}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        Приемщик:
+                    </div>
+                    <div class="col-3">
+                        {{item.user.last_name}}
+                    </div>
+                </div>
+            </div>   
+    </div>
+
+    <div class="row">
+    <div class="col-md-6">
+        <h5>История изменения статуса</h5>
+    </div>
+    </div>
+            {% for status in queryset %}
+            <div class="row">
+            <div class="col-md-3">
+            {{status.status}}
+            </div>
+            <div class="col-md-3">
+            {{status.date_of_change}}
+            </div>
+            </div>
+            {% endfor %}
+
+
+</div>
+{% endblock %}

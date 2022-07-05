@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<meta charset="UTF-8">
+
+<head>
+
+    <style type="text/css">
+        @font-face {
+            font-family: "Azoft Sans Italic";
+            src: url("webfonts/azoft-sans-italic.ttf")
+        }
+
+        table,
+        h1,
+        p {
+            font-family: "Azoft Sans Italic";
+            font-size: large;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Наряд-заказ на предпродажный ремонт #{{order.id}} от {{order.created}}</h1>
+    <table style="width:100%">
+        <tr>
+            <td>Исполнитель</td>
+            <td>ООО Ритейл</td>
+        </tr>
+        <tr>
+            <td>Юридический адрес</td>
+            <td>606460 Нижний Новгород ул. Канавинская д. 3 п. 603</td>
+        </tr>
+        <tr>
+            <td>ИНН</td>
+            <td>5257173237</td>
+        </tr>
+        <tr>
+            <td>Банк</td>
+            <td>ТОЧКА ПАО БАНКА «ФК ОТКРЫТИЕ»</td>
+        </tr>
+        <tr>
+            <td>БИК</td>
+            <td>044525999</td>
+        </tr>
+        <tr>
+            <td>Расчетный счет</td>
+            <td>40702810014500007297</td>
+        </tr>
+    </table>
+    <br>
+    <table style="width:100%">
+        <tr>
+            <td>Модель телефона</td>
+            <td>{{order.brand}} {{order.model}}</td>
+        </tr>
+        <tr>
+            <td>IMEI</td>
+            <td>{{order.imei}}</td>
+        </tr>
+        <tr>
+            <td>Дата покупки</td>
+            <td>{{order.date_of_purchase}}</td>
+        </tr>
+        <tr>
+            <td>Неисправность</td>
+            <td>{{order.defect}}</td>
+        </tr>
+        <tr>
+            <td>Состояние аппарата</td>
+            <td>предпродажный</td>
+        </tr>
+        <tr>
+            <td>Комплектность</td>
+            <td>Полная</td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <p>
+        Выбраковал(а) ({{order.user.last_name}}) _______________________
+        Место печати
+    </p>
+</body>
+
+</html>

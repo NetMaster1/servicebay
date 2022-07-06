@@ -56,8 +56,9 @@
                 <div class="col-3">
                     <form action="{% url 'update' item.id %}" method="POST">
                         {% csrf_token %}
-                        <input list='status' name='status' placeholder="Изменить статус" required>
-                        <datalist id='status'>
+
+                        <select name="status" id="status" class='form-control' required>
+                            <option value="">Выберите статус</option>
                             <option value="Принят на точке">Принят на точке</option>
                             <option value="Предпродажный">Предпродажный</option>
                             <option value="Ожидает отправки в АйтиОпт">Ожидает отправки в АйтиОпт</option>
@@ -77,7 +78,8 @@
                             <option value="Перемещен на склад Ремонт">Перемещен на склад Ремонт</option>
                             <option value="Получена компенсация">Получена компенсация</option>
                             <option value="Списан">Списан</option>
-                        </datalist>
+                       
+                        </select>
                 </div>
                 <div class="col">
                     <input type="submit" value="Изменить" class="btn btn-primary">

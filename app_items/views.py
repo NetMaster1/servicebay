@@ -251,14 +251,22 @@ def search(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             queryset_list = Item.objects.all()
-            imei = request.POST['imei']
-            shop = request.POST['shop']
-            brand = request.POST['brand']
-            user = request.POST['user']
-            start_date = request.POST['start_date']
-            end_date = request.POST['end_date']
-            status_update_date = request.POST['status_update_date']
-            status = request.POST['status']
+            imei = request.POST.get('imei', False)
+            #imei = request.POST['imei']
+            shop = request.POST.get("shop", False)
+            #shop = request.POST['shop']
+            brand = request.POST.get('brand', False)
+            #brand = request.POST['brand']
+            user = request.POST.get('user', False)
+            #user = request.POST['user']
+            start_date = request.POST.get('start_date', False)
+            #start_date = request.POST['start_date']
+            end_date = request.POST.get('end_date')
+            #end_date = request.POST['end_date']
+            status_update_date = request.POST.get('status_update_date')
+            #status_update_date = request.POST['status_update_date']
+            status = request.POST.get('status', False)
+            #status = request.POST['status']
             if imei:
                 queryset_list = queryset_list.filter(imei__icontains=imei)
             if shop:

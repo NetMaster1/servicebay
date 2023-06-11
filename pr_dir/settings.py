@@ -148,5 +148,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
-
+#try:
+#    from .local_settings import *
+#except ImportError:
+#   pass
 

@@ -215,6 +215,10 @@ def update(request, item_id):
                     base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
                     url=base_url.format(phone, message)
                     api_request=requests.get(url)
+                    
+                    #Arduino API
+                    
+
 
                     # ===========Twilo API==================
                     # account_sid = 'ACb9a5209252abd7219e19a812f8108acc'

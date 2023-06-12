@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'pr_dir.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
+#DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
@@ -86,10 +86,11 @@ WSGI_APPLICATION = 'pr_dir.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'ENGINE': 'django.db.backends.postgresql',
+        #'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'servicebay',
         'USER': 'postgres',
         'PASSWORD': 'ylhio65v',
+        #'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -149,7 +150,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+#try:
+#    from .local_settings import *
+#except ImportError:
+#    pass

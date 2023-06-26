@@ -15,6 +15,9 @@ import nexmo
 import os
 from twilio.rest import Client
 from django.forms.fields import DateField
+import serial
+import time #Required to use delay functions
+
 
 # Create your views here.
 
@@ -206,22 +209,36 @@ def update(request, item_id):
             status_change_date.save()
             queryset = Status_change.objects.filter(imei=item.imei)
             if item.status == 'Отправлен на точку':
-                if item.phone:
+                try:
+                #if item.phone:
                     #=============================Smsc API=======================
                     #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
+                    #phone=item.phone
+                    #message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
+                    ##base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
+                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
+                    #url=base_url.format(phone, message)
+                    #api_request=requests.get(url)
+                    
+                    #===================Arduino API===============================
+                    ArduinoData = serial.Serial('com4', 19200)
+                    time.sleep(3)
                     phone=item.phone
-                    message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
-                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
-                    base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
-                    url=base_url.format(phone, message)
-                    api_request=requests.get(url)
-                    
-                    #Arduino API
-                    
-
+                    #message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
+                    message="Ваш телефон готов"
+                    data=f'{phone}:{message}\r'
+                    #data_utf8=unicode(data, "utf-8")
+                    #data=data+'\r'
+                    ArduinoData.write(data.encode())
+                    #res = bytes(phone_number)
+                    #ArduinoData.write(data.encode('utf-8'))
+                    #ArduinoData.close()
+                    #ArduinoData.flush()
+                    #ArduinoData.close()
+                    #serial.close()
 
                     # ===========Twilo API==================
-                    # account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
+                    # account_sid = 'ACb9a5209252abd7219e19a812f8108ac
                     # auth_token = '264094dd9b5cb2c4e5f1ca939d1cd4e0'
                     # client = Client(account_sid, auth_token)
                     # message = client.messages \
@@ -233,7 +250,7 @@ def update(request, item_id):
                     # print(message.sid)
                     # messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
                 # ================================
-                else:
+                except:
                     messages.error(request, "Сообщение не было отослано. Проверьте баланс или тип заявки.")
                 # =============Nexmo API===========
                 # client = nexmo.Client(key='264369ff', secret='cCGl0q81eNJ7mbWc')

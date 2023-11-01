@@ -2,7 +2,7 @@
 SECRET_KEY = 'iyk$#3asdfsfs##1&uvp1-gbn7%pgfgdfgdfgsagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [ 'localhost', 'servicebay.ru', 'www.servicebay.ru']
 

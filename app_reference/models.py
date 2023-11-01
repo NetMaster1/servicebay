@@ -18,8 +18,8 @@ class Workshop(models.Model):
         verbose_name = 'workshop'
         verbose_name_plural = 'workshops'
 
-    def __int__(self):
-        return self.id
+    def __str__(self):
+        return self.name
     
 class Supplier(models.Model):
     name = models.CharField(max_length=250)
@@ -39,8 +39,8 @@ class Brand(models.Model):
         verbose_name = 'brand'
         verbose_name_plural = 'brands'
 
-    def __int__(self):
-        return self.id
+    def __str__(self):
+        return self.name
     
 
 class Status(models.Model):

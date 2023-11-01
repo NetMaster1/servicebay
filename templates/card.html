@@ -25,6 +25,7 @@
                 </div>
                 <div class="col-3">
                     {{item.shop}}
+                    =={{item.shop_modified}}==
                 </div>
             </div>
             <div class="row">
@@ -33,6 +34,7 @@
                 </div>
                 <div class="col-3">
                     {{item.brand}}
+                    =={{item.brand_modified}}==
                     {{item.model}}
                 </div>
             </div>
@@ -49,7 +51,7 @@
                     Текущий статус
                 </div>
                 <div class="col-3">
-                    {{item.status}}
+                    {{item.status}}=={{item.status_modified}}==
                 </div>
 
                 {% if request.user.username == 'Винокуров' or request.user.username == 'NetMaster' %}
@@ -78,7 +80,6 @@
                             <option value="Отправлен на точку">Отправлен на точку</option>
                             <option value="Сделан возврат">Сделан возврат</option>
                             <option value="Перемещен на склад Ремонт">Перемещен на склад Ремонт</option>
-                            <option value="Получена компенсация">Получена компенсация</option>
                             <option value="Списан">Списан</option>
                        
                         </select>

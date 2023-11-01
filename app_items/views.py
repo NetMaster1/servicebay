@@ -15,6 +15,8 @@ import nexmo
 import os
 from twilio.rest import Client
 from django.forms.fields import DateField
+import serial
+import time
 
 # Create your views here.
 
@@ -28,6 +30,8 @@ def choice(request):
                 return redirect('item')
             elif option == 'log':
                 return redirect('log')
+            elif option == 'reports':
+                return redirect ('workshop_reports')
             elif option == 'pending':
                 return redirect('pending')
             elif option == 'expiring':
@@ -207,12 +211,32 @@ def update(request, item_id):
             queryset = Status_change.objects.filter(imei=item.imei)
             if item.status == 'Отправлен на точку':
                 if item.phone:
+                    #=============================Arduino API==============================
+                    #ArduinoData = serial.Serial('/dev/ttyACM0', 19200)
+                    #ArduinoData = serial.Serial('/dev/ttyACM0 (Arduino Uno)', 19200)
+                    #ArduinoData = serial.Serial('com4', 19200)
+
+                    #time.sleep(2)
+                    ##phone=item.phone
+                    #message=f'You phone {item.brand} {item.model} IMEI {item.imei} is ready.'
+                    #messageToArd=f'{phone}:{message}\r'
+
+                    #try:
+                        #ArduinoData.write(messageToArd.encode())#encodes string to bytes
+                        #res = bytes(phone_number)
+                        #ArduinoData.write(messageToArd.encode('ascii'))
+                        #ArduinoData.close()
+                        #ArduinoData.flush()
+                        #messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
+                    #except:
+                        #messages.error(request, "Ошибка серийного порта.")
+
                     #=============================Smsc API=======================
                     #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
                     phone=item.phone
                     message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
-                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
-                    base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
+                    base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
+                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
                     url=base_url.format(phone, message)
                     api_request=requests.get(url)
 
@@ -251,22 +275,14 @@ def search(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             queryset_list = Item.objects.all()
-            imei = request.POST.get('imei', False)
-            #imei = request.POST['imei']
-            shop = request.POST.get("shop", False)
-            #shop = request.POST['shop']
-            brand = request.POST.get('brand', False)
-            #brand = request.POST['brand']
-            user = request.POST.get('user', False)
-            #user = request.POST['user']
-            start_date = request.POST.get('start_date', False)
-            #start_date = request.POST['start_date']
-            end_date = request.POST.get('end_date')
-            #end_date = request.POST['end_date']
-            status_update_date = request.POST.get('status_update_date')
-            #status_update_date = request.POST['status_update_date']
-            status = request.POST.get('status', False)
-            #status = request.POST['status']
+            imei = request.POST['imei']
+            shop = request.POST['shop']
+            brand = request.POST['brand']
+            user = request.POST['user']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            status_update_date = request.POST['status_update_date']
+            status = request.POST['status']
             if imei:
                 queryset_list = queryset_list.filter(imei__icontains=imei)
             if shop:

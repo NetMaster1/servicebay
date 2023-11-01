@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iyk$#3asdfsfs##1&uvp1-gbn7%pgfgdfgdfgsagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
+SECRET_KEY = 'iyk$#3asdfsfs##1&uvp1-dbn7%pgfgdfgdfgsagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',  'servicebay.ru', 'www.serviceby.ru']
 
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_users',
     'app_items',
+    'app_reports',
+    'app_reference',
+    'app_maintenance',
 ]
 
 MIDDLEWARE = [
@@ -148,8 +151,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
+
 try:
     from .local_settings import *
 except ImportError:
     pass
-

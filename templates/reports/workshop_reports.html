@@ -1,11 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Reports page
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<!-- <div class="hide"> -->
+<div class="container">
+    <div class="page_location">
+
+        <div class="log border rounded mt-5">
+            <div class="row mt-3">
+                <h3>Отчет по заявкам на ремонт</h3>
+            </div>
+        </div>
+
+        <div class="log border rounded">
+            <form action="#" method="POST">
+                {% csrf_token %}
+
+            <div class="row m-auto p-1">
+                <!-- <div class="-2">
+            <input type="text" name="imei" placeholder="IMEI">
+        </div> -->
+                <div class="col-2">
+                    <!-- <input type="date" id='start_date' name="start_date" class='form-control' required> -->
+                    <input type="date" id='start_date' name="start_date" class='form-control'>
+                </div>
+                <div class="col-2">
+                    <input type="date" id='end_date' name="end_date" class="form-control">
+                </div>
+                <div class="col-2">
+                    
+                        <select name="status" id="status" class='form-control' required>
+                            <option value="">Выберите статус</option>
+                            <option value="Принят на точке">Принят на точке</option>
+                            <option value="Предпродажный">Предпродажный</option>
+                            <option value="Ожидает отправки в АйтиОпт">Ожидает отправки в АйтиОпт</option>
+                            <option value="Отправлен в СМТЕЛ">Отправлен в СМТЕЛ</option>
+                            <option value="Отправлен в Санави">Отправлен в Санави</option>
+                            <option value="Отправлен в Галактику">Отправлен в Галактику</option>
+                            <option value="Отправлен на Горького">Отправлен на Горького</option>
+                            <option value="Отправлен в другой сервис. центр">Отправлен в другой сервис. центр</option>
+                            <option value="Отправлен в коммерческий ремонт">Отправлен в коммерческий ремонт</option>
+                            <option value="Отправлен в АйтиОпт">Отправлен в АйтиОпт</option>
+                            <option value="Отправлен в ЦД">Отправлен в ЦД</option>
+                            <option value="Отправлен в РТК">Отправлен в РТК</option>
+                            <option value="Отправлен другому поставщику">Отправлен другому поставщику</option>
+                            <option value="Получен обратно от поставщика">Получен обратно от поставщика</option>
+                            <option value="Получен Акт НРП">Получен Акт НРП</option>
+                            <option value="Получена компенсация">Получена компенсация</option>
+                            <option value="Отправлен на точку">Отправлен на точку</option>
+                            <option value="Сделан возврат">Сделан возврат</option>
+                            <option value="Перемещен на склад Ремонт">Перемещен на склад Ремонт</option>
+                            <option value="Списан">Списан</option>
+                        
+                        </select>
+                </div>
+            </div>
+
+            <div class="row m-auto mt-1 mb-2 p-2">
+                    <div class="col-2">
+                        <div class="row m-auto">
+                            <input type="submit" value="Применить" class="btn btn-sm btn-block btn-outline-dark">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="row m-auto">
+                            <input type="reset" value="Сбросить" class="btn btn-sm btn-block btn-outline-dark">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="row m-auto">
+                            <a href="#" class="btn btn-sm btn-block btn-outline-dark">
+                                Закрыть
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <a href="#">
+                            <button type="button" name="button" class="btn btn-sm btn-block btn-outline-dark">
+                                Сохранить в Excel
+                            </button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+    </div>
+
+
+    <div class="log border rounded">
+        
+
+           <div class="row m-auto">
+            <div class="col-1">
+                <h5>#</h5>
+            </div>
+            <div class="col-2">
+                <h5>Дата создания</h5>
+            </div>
+            <div class="col-3">
+                <h5>Дата изменения статуса</h5>
+            </div>
+            <div class="col-1">
+                <h5>IMEI</h5>
+            </div>
+            <div class="col-2">
+                <h5>Статус</h5>
+            </div>
+            <div class="col-2">
+                <h5>Модель</h5>
+            </div>
+          
+        </div>
+
+
+
+        {% for item in sale_report %}
+        <div class="row m-auto">
+            <div class="col-1">{{item.index}}</div>
+            <div class="col-2">{{item.imei}}</div>
+            <div class="col-3">{{item.product}}</div>
+            <div class="col-1">{{item.quantity}}</div>
+            <div class="col-2">{{item.av_sum}}</div>
+            <div class="col-2">{{item.retail_sum}}</div>
+            <div class="col-1">{{item.margin}}</div>
+
+
+        </div>
+        {%endfor%}
+
+
+    </div>
+</div>
+</div>
+
+{%endblock%}

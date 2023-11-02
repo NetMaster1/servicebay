@@ -50,7 +50,7 @@ def workshop_reports (request):
             # sheet header in the first row
             row_num = 0
             font_style = xlwt.XFStyle()
-            columns = ['Дата создания', "Дата изменения статуса", 'IMEI', 'Модель', 'Статус']
+            columns = ['Дата создания', "Дата изменения статуса", 'IMEI', 'Бранд', 'Модель', 'Статус']
             for col_num in range(len(columns)):
                 ws.write(row_num, col_num + 1, columns[col_num], font_style)
 
@@ -65,6 +65,8 @@ def workshop_reports (request):
                 ws.write(row_num, col_num, str(item.status_updated), font_style)
                 col_num +=1
                 ws.write(row_num, col_num, item.imei, font_style)
+                col_num +=1
+                ws.write(row_num, col_num, item.brand, font_style)
                 col_num +=1
                 ws.write(row_num, col_num, item.model, font_style)
                 col_num +=1

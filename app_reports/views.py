@@ -18,6 +18,7 @@ from django.forms.fields import DateField
 import serial
 import time
 from app_items.models import Item, Registry, RegistryLine, Status_change
+import xlwt
 
 # Create your views here.
 
@@ -26,9 +27,6 @@ def workshop_reports (request):
     if request.user.is_authenticated:
         items=Item.objects.all()
         if request.method == "POST":
-<<<<<<< HEAD
-            pass
-=======
             # start_date = request.POST["start_date"]
             # start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
             # end_date = request.POST["end_date"]
@@ -77,7 +75,6 @@ def workshop_reports (request):
             wb.save(response)
             return response
 
->>>>>>> bcc12ac58cb9470d7ba02ea77311120f98ca632e
         else:
             return render (request, 'reports/workshop_reports.html')
 

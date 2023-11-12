@@ -13,7 +13,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 import nexmo
 import os
-from twilio.rest import Client
+#from twilio.rest import Client
 from django.forms.fields import DateField
 import serial
 import time

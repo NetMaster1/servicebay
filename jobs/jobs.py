@@ -18,10 +18,10 @@ def scheduled_dispatch():
  #=============================Smsc API=======================
 	#В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
 	#phone=item.phone
-	phone='79519125000'
+	phone='79527644417'
 	for item in items:
 		message=f'ООО Ритейл. {item.brand} {item.model} IMEI {item.imei} 7 дн. в {item.shop}.'
-		print(message)
+		#print(message)
 		#message='Ваш телефон готов'
 		#base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
 		base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"

@@ -4,5 +4,5 @@ from .jobs import scheduled_dispatch
 
 def start():
 	scheduler = BackgroundScheduler()
-	scheduler.add_job(scheduled_dispatch, 'interval', seconds=60)
+	scheduler.add_job(scheduled_dispatch, 'interval', days=1)
 	scheduler.start()

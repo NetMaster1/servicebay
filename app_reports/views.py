@@ -17,7 +17,6 @@ from twilio.rest import Client
 from django.forms.fields import DateField
 import serial
 import time
-from datetime import datetime, date, timedelta
 from app_items.models import Item, Registry, RegistryLine, Status_change
 import xlwt
 

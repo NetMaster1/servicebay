@@ -18,7 +18,8 @@ def scheduled_dispatch():
  #=============================Smsc API=======================
 	#В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
 	#phone=item.phone
-	phone='79527644417'
+	#phone='79527644417'
+	phone='79519125000'
 	for item in items:
 		message=f'ООО Ритейл. {item.brand} {item.model} IMEI {item.imei} 7 дн. в {item.shop}.'
 		#print(message)

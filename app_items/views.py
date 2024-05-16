@@ -230,15 +230,15 @@ def update(request, item_id):
                         #messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
                     #except:
                         #messages.error(request, "Ошибка серийного порта.")
-
                     #=============================Smsc API=======================
-                    #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
+                #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
                     phone=item.phone
-                    message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
+                    message=f'ООО Ритейл. Ваше телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
                     base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
                     #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
                     url=base_url.format(phone, message)
                     api_request=requests.get(url)
+                    
 
                     # ===========Twilo API==================
                     # account_sid = 'ACb9a5209252abd7219e19a812f8108acc'

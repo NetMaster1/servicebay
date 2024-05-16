@@ -24,6 +24,9 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
 SECRET_KEY = 'iyk$#3asdfsfs##1&uvp1-dbn7%pgfgdfgdfgsagk6sa#(q=k(jjh@rk3ueo#4lgt0o'
 
+
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_users',
     'app_items',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -149,6 +153,9 @@ SESSION_COOKIE_AGE = 300  # 5 seconds for testing
 SESSION_SAVE_EVERY_REQUEST = True
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': 'backup/'}
 
 
 try:

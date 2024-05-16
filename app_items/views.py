@@ -13,11 +13,10 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 import nexmo
 import os
-from twilio.rest import Client
+#from twilio.rest import Client
 from django.forms.fields import DateField
 import serial
-import time #Required to use delay functions
-
+import time
 
 # Create your views here.
 
@@ -31,6 +30,8 @@ def choice(request):
                 return redirect('item')
             elif option == 'log':
                 return redirect('log')
+            elif option == 'reports':
+                return redirect ('workshop_reports')
             elif option == 'pending':
                 return redirect('pending')
             elif option == 'expiring':
@@ -209,36 +210,38 @@ def update(request, item_id):
             status_change_date.save()
             queryset = Status_change.objects.filter(imei=item.imei)
             if item.status == 'Отправлен на точку':
-                try:
-                #if item.phone:
+                if item.phone:
+                    #=============================Arduino API==============================
+                    #ArduinoData = serial.Serial('/dev/ttyACM0', 19200)
+                    #ArduinoData = serial.Serial('/dev/ttyACM0 (Arduino Uno)', 19200)
+                    #ArduinoData = serial.Serial('com4', 19200)
+
+                    #time.sleep(2)
+                    ##phone=item.phone
+                    #message=f'You phone {item.brand} {item.model} IMEI {item.imei} is ready.'
+                    #messageToArd=f'{phone}:{message}\r'
+
+                    #try:
+                        #ArduinoData.write(messageToArd.encode())#encodes string to bytes
+                        #res = bytes(phone_number)
+                        #ArduinoData.write(messageToArd.encode('ascii'))
+                        #ArduinoData.close()
+                        #ArduinoData.flush()
+                        #messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
+                    #except:
+                        #messages.error(request, "Ошибка серийного порта.")
                     #=============================Smsc API=======================
-                    #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
-                    #phone=item.phone
-                    #message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
-                    ##base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
-                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
-                    #url=base_url.format(phone, message)
-                    #api_request=requests.get(url)
-                    
-                    #===================Arduino API===============================
-                    ArduinoData = serial.Serial('com4', 19200)
-                    time.sleep(3)
+                #В сообщении нужно обязательно указать отправителя, иначе спам фильтр не пропустит его.
                     phone=item.phone
-                    #message=f'ООО Ритейл. Телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
-                    message="Ваш телефон готов"
-                    data=f'{phone}:{message}\r'
-                    #data_utf8=unicode(data, "utf-8")
-                    #data=data+'\r'
-                    ArduinoData.write(data.encode())
-                    #res = bytes(phone_number)
-                    #ArduinoData.write(data.encode('utf-8'))
-                    #ArduinoData.close()
-                    #ArduinoData.flush()
-                    #ArduinoData.close()
-                    #serial.close()
+                    message=f'ООО Ритейл. Ваше телефон {item.brand} {item.model} IMEI {item.imei} готов и завтра будет доставлен на точку.'
+                    base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes=OOO Ритейл. Ваш телефон готов."
+                    #base_url="https://smsc.ru/sys/send.php?login=NetMaster&psw=ylhio65v&phones={}&mes={}"
+                    url=base_url.format(phone, message)
+                    api_request=requests.get(url)
+                    
 
                     # ===========Twilo API==================
-                    # account_sid = 'ACb9a5209252abd7219e19a812f8108ac
+                    # account_sid = 'ACb9a5209252abd7219e19a812f8108acc'
                     # auth_token = '264094dd9b5cb2c4e5f1ca939d1cd4e0'
                     # client = Client(account_sid, auth_token)
                     # message = client.messages \
@@ -250,7 +253,7 @@ def update(request, item_id):
                     # print(message.sid)
                     # messages.success(request, "Клиенту было отослано сообщение о завершении ремонта.")
                 # ================================
-                except:
+                else:
                     messages.error(request, "Сообщение не было отослано. Проверьте баланс или тип заявки.")
                 # =============Nexmo API===========
                 # client = nexmo.Client(key='264369ff', secret='cCGl0q81eNJ7mbWc')
@@ -272,22 +275,14 @@ def search(request):
     if request.user.is_authenticated:
         if request.method == "POST":
             queryset_list = Item.objects.all()
-            imei = request.POST.get('imei', False)
-            #imei = request.POST['imei']
-            shop = request.POST.get("shop", False)
-            #shop = request.POST['shop']
-            brand = request.POST.get('brand', False)
-            #brand = request.POST['brand']
-            user = request.POST.get('user', False)
-            #user = request.POST['user']
-            start_date = request.POST.get('start_date', False)
-            #start_date = request.POST['start_date']
-            end_date = request.POST.get('end_date')
-            #end_date = request.POST['end_date']
-            status_update_date = request.POST.get('status_update_date')
-            #status_update_date = request.POST['status_update_date']
-            status = request.POST.get('status', False)
-            #status = request.POST['status']
+            imei = request.POST['imei']
+            shop = request.POST['shop']
+            brand = request.POST['brand']
+            user = request.POST['user']
+            start_date = request.POST['start_date']
+            end_date = request.POST['end_date']
+            status_update_date = request.POST['status_update_date']
+            status = request.POST['status']
             if imei:
                 queryset_list = queryset_list.filter(imei__icontains=imei)
             if shop:

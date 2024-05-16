@@ -1,13 +1,18 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from app_reference.models import Shop, Workshop, Brand, Status, Supplier
 
 # Create your models here.
 
 class Item(models.Model):
     shop = models.CharField(max_length=250)
+    shop_modified=models.ForeignKey(Shop, on_delete=models.DO_NOTHING, null=True)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     brand = models.CharField(max_length=250)
+    brand_modified=models.ForeignKey(Brand, on_delete=models.DO_NOTHING, null=True)
+    supplier=models.ForeignKey(Supplier, on_delete=models.DO_NOTHING, null=True)
+    workshop=models.ForeignKey(Workshop, on_delete=models.DO_NOTHING, null=True)
     model = models.CharField(max_length=250)
     imei = models.CharField(max_length=250)
     created = models.DateField(auto_now_add=True)
@@ -21,6 +26,7 @@ class Item(models.Model):
     cheque = models.BooleanField(default=False)
     pending = models.BooleanField(default=False)
     status = models.CharField(max_length=250)
+    status_modified = models.ForeignKey(Status, on_delete=models.DO_NOTHING, null=True)
     status_updated = models.DateField(auto_now=True)
     delta_expiring=models.IntegerField(default=0)
     delta_shop_hold = models.IntegerField(default=0)

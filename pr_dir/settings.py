@@ -42,9 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'app_users',
     'app_items',
-    'dbbackup',
+    'app_reports',
+    'app_reference',
+    'app_maintenance',
+    'dbbackup',  # django-dbbackup
 ]
 
 MIDDLEWARE = [
@@ -101,6 +105,11 @@ DATABASES = {
     }
 }
 
+#cronjobs
+CRONJOBS = [
+    ('*/5 * * * *', 'app_items.cron.my_scheduled_job')
+    #('0   4 * * *', 'django.core.management.call_command', ['clearsessions']),
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -158,8 +167,10 @@ DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': 'backup/'}
 
 
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': 'backup/'}
+
 try:
     from .local_settings import *
 except ImportError:
     pass
-

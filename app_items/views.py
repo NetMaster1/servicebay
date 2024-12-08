@@ -354,7 +354,7 @@ def shop_hold(request):
         date = datetime.date.today()
         queryset = Item.objects.all()
         for item in queryset:
-            if item.status == 'Отправлен в СМТЕЛ' or item.status == 'Отправлен на Горького' or item.status == 'Отправлен в другой сервис. центр':
+            if item.status == 'Отправлен в СМТЕЛ' or item.status == 'Отправлен на Горького' or item.status == 'Отправлен в другой сервис. центр' or item.status == 'Отправлен в Галактику':
                 delta = date - item.created
                 item.delta_shop_hold = delta.days
                 item.save()
